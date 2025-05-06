@@ -1,0 +1,675 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Aspen Grove Services - HIPAA-Compliant Document Portal'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - test
+      - prod
+    Description: The deployment environment
+    
+  DomainName:
+    Type: String
+    Default: aspengroveservices.com
+    Description: Domain name for the application
+    
+  CognitoAutoVerifiedAttributes:
+    Type: CommaDelimitedList
+    Default: email
+    Description: Attributes to auto-verify in Cognito
+
+Resources:
+  #========================================================
+  # IAM Roles and Policies
+  #========================================================
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub 'aspengrove-lambda-execution-role-${Environment}'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+      Policies:
+        - PolicyName: S3Access
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:GetObject'
+                  - 's3:PutObject'
+                  - 's3:ListBucket'
+                Resource:
+                  - !Sub 'arn:aws:s3:::aspengrove-client-uploads-${Environment}'
+                  - !Sub 'arn:aws:s3:::aspengrove-client-uploads-${Environment}/*'
+                  - !Sub 'arn:aws:s3:::aspengrove-templates-${Environment}'
+                  - !Sub 'arn:aws:s3:::aspengrove-templates-${Environment}/*'
+                  - !Sub 'arn:aws:s3:::aspengrove-completed-reports-${Environment}'
+                  - !Sub 'arn:aws:s3:::aspengrove-completed-reports-${Environment}/*'
+        - PolicyName: BedrockAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'bedrock:InvokeModel'
+                Resource: '*'
+
+  #========================================================
+  # S3 Buckets
+  #========================================================
+  ClientUploadsBucket:
+    Type: AWS::S3::Bucket
+    DependsOn: S3UploadEventPermission
+    Properties:
+      BucketName: !Sub 'aspengrove-client-uploads-${Environment}'
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - '*'
+            AllowedMethods:
+              - GET
+              - PUT
+              - POST
+              - DELETE
+              - HEAD
+            AllowedOrigins:
+              - !Sub 'https://${DomainName}'
+              - !Sub 'https://*.${DomainName}'
+            MaxAge: 3600
+      LifecycleConfiguration:
+        Rules:
+          - Id: TransitionToStandardIA
+            Status: Enabled
+            Transitions:
+              - TransitionInDays: 30
+                StorageClass: STANDARD_IA
+      # Adding notification configuration directly to the bucket
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: 's3:ObjectCreated:*'
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: prefix
+                    Value: uploads/
+            Function: !GetAtt DocumentProcessorFunction.Arn
+            
+  TemplatesBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'aspengrove-templates-${Environment}'
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+            
+  CompletedReportsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'aspengrove-completed-reports-${Environment}'
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - '*'
+            AllowedMethods:
+              - GET
+              - HEAD
+            AllowedOrigins:
+              - !Sub 'https://${DomainName}'
+              - !Sub 'https://*.${DomainName}'
+            MaxAge: 3600
+      LifecycleConfiguration:
+        Rules:
+          - Id: TransitionToStandardIA
+            Status: Enabled
+            Transitions:
+              - TransitionInDays: 30
+                StorageClass: STANDARD_IA
+                
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'aspengrove-website-${Environment}'
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+        
+  WebsiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WebsiteBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Sub '${WebsiteBucket.Arn}/*'
+
+  #========================================================
+  # Lambda Functions
+  #========================================================
+  GenerateUploadUrlFunction:
+    Type: AWS::Lambda::Function
+    DependsOn: LambdaExecutionRole
+    Properties:
+      FunctionName: !Sub 'aspengrove-generate-upload-url-${Environment}'
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          const AWS = require('aws-sdk');
+          
+          // Initialize the S3 client
+          const s3 = new AWS.S3();
+          
+          // Configure the bucket name from environment variables
+          const BUCKET_NAME = process.env.S3_BUCKET_NAME;
+          
+          exports.handler = async (event, context) => {
+              // Set up CORS headers
+              const headers = {
+                  'Access-Control-Allow-Origin': process.env.ALLOWED_ORIGIN,
+                  'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+                  'Access-Control-Allow-Methods': 'OPTIONS,POST'
+              };
+              
+              // Handle preflight OPTIONS request
+              if (event.httpMethod === 'OPTIONS') {
+                  return {
+                      statusCode: 200,
+                      headers,
+                      body: JSON.stringify({ message: 'CORS preflight successful' })
+                  };
+              }
+              
+              try {
+                  // Parse the request body
+                  const requestBody = JSON.parse(event.body);
+                  const { fileName, fileType, firmId } = requestBody;
+                  
+                  // Validate required parameters
+                  if (!fileName || !fileType) {
+                      return {
+                          statusCode: 400,
+                          headers,
+                          body: JSON.stringify({ error: 'Missing required parameters: fileName and fileType are required' })
+                      };
+                  }
+                  
+                  // Create a folder structure by firm ID if provided
+                  const firmFolder = firmId ? `firm-${firmId}/` : '';
+                  
+                  // Create a unique file key with a timestamp and UUID
+                  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                  const uuid = Math.random().toString(36).substring(2, 15);
+                  const sanitizedFileName = sanitizeFileName(fileName);
+                  const fileKey = `uploads/${firmFolder}${timestamp}-${uuid}-${sanitizedFileName}`;
+                  
+                  // Generate pre-signed URL with a 15-minute expiration
+                  const params = {
+                      Bucket: BUCKET_NAME,
+                      Key: fileKey,
+                      ContentType: fileType,
+                      Expires: 900 // 15 minutes in seconds
+                  };
+                  
+                  const uploadUrl = await s3.getSignedUrlPromise('putObject', params);
+                  
+                  // Return the URL and file key
+                  return {
+                      statusCode: 200,
+                      headers,
+                      body: JSON.stringify({
+                          uploadUrl,
+                          fileKey
+                      })
+                  };
+              } catch (error) {
+                  console.error('Error generating pre-signed URL:', error);
+                  
+                  // Return error response
+                  return {
+                      statusCode: 500,
+                      headers,
+                      body: JSON.stringify({ error: 'Failed to generate upload URL', message: error.message })
+                  };
+              }
+          };
+          
+          function sanitizeFileName(fileName) {
+              // Remove any path-traversal characters
+              let sanitized = fileName.replace(/[/\\?%*:|"<>]/g, '-');
+              
+              // Remove any leading/trailing spaces
+              sanitized = sanitized.trim();
+              
+              // If the filename is now empty, provide a default
+              if (!sanitized) {
+                  sanitized = 'file';
+              }
+              
+              return sanitized;
+          }
+      Runtime: nodejs14.x
+      Timeout: 30
+      MemorySize: 256
+      Environment:
+        Variables:
+          S3_BUCKET_NAME: !Sub 'aspengrove-client-uploads-${Environment}'
+          ALLOWED_ORIGIN: !Sub 'https://${DomainName}'
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+  
+  DocumentProcessorFunction:
+    Type: AWS::Lambda::Function
+    DependsOn: LambdaExecutionRole
+    Properties:
+      FunctionName: !Sub 'aspengrove-document-processor-${Environment}'
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          exports.handler = async (event, context) => {
+              console.log('Document processor triggered with event:', JSON.stringify(event));
+              
+              // Process S3 events
+              const s3Events = event.Records || [];
+              
+              for (const record of s3Events) {
+                  if (record.eventSource === 'aws:s3' && record.eventName.startsWith('ObjectCreated:')) {
+                      const bucket = record.s3.bucket.name;
+                      const key = decodeURIComponent(record.s3.object.key.replace(/\+/g, ' '));
+                      
+                      console.log(`Processing new file: ${key} in bucket: ${bucket}`);
+                      
+                      // Extract firm ID from path if present
+                      // Format: uploads/firm-{firmId}/{timestamp}-{uuid}-{filename}
+                      const firmIdMatch = key.match(/uploads\/firm-([^\/]+)\//);
+                      const firmId = firmIdMatch ? firmIdMatch[1] : null;
+                      
+                      console.log(`File belongs to firm ID: ${firmId || 'Not specified'}`);
+                      
+                      // Future implementation: Connect to AWS Bedrock for Claude AI processing
+                      // For now, this is a placeholder for the document processing logic
+                      
+                      // Log success
+                      console.log(`Successfully processed file: ${key}`);
+                  }
+              }
+              
+              return {
+                  statusCode: 200,
+                  body: JSON.stringify({
+                      message: 'Document processing complete',
+                      processedFiles: s3Events.length
+                  })
+              };
+          };
+      Runtime: nodejs14.x
+      Timeout: 60
+      MemorySize: 512
+      Environment:
+        Variables:
+          TEMPLATES_BUCKET: !Sub 'aspengrove-templates-${Environment}'
+          OUTPUT_BUCKET: !Sub 'aspengrove-completed-reports-${Environment}'
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+
+  #========================================================
+  # S3 Event Triggers
+  #========================================================
+  S3UploadEventPermission:
+    Type: AWS::Lambda::Permission
+    DependsOn: DocumentProcessorFunction
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !GetAtt DocumentProcessorFunction.Arn
+      Principal: s3.amazonaws.com
+      SourceArn: !Sub 'arn:aws:s3:::aspengrove-client-uploads-${Environment}'
+      
+  #========================================================
+  # Cognito User Pool
+  #========================================================
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Sub 'AspenGroveUserPool-${Environment}'
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: false
+      AutoVerifiedAttributes: !Ref CognitoAutoVerifiedAttributes
+      MfaConfiguration: 'OFF'
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 1
+      EmailConfiguration:
+        EmailSendingAccount: COGNITO_DEFAULT
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 12
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+          RequireUppercase: true
+          TemporaryPasswordValidityDays: 7
+      Schema:
+        - Name: email
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+        - Name: given_name
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+        - Name: family_name
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+        - Name: phone_number
+          AttributeDataType: String
+          Mutable: true
+          Required: false
+        - Name: firm_name
+          AttributeDataType: String
+          Mutable: true
+          Required: false
+        - Name: bar_number
+          AttributeDataType: String
+          Mutable: true
+          Required: false
+        - Name: subscription_tier
+          AttributeDataType: String
+          Mutable: true
+          Required: false
+        - Name: firm_id
+          AttributeDataType: String
+          Mutable: true
+          Required: false
+        - Name: user_role
+          AttributeDataType: String
+          Mutable: true
+          Required: false
+      UsernameAttributes:
+        - email
+      UserPoolAddOns:
+        AdvancedSecurityMode: ENFORCED
+        
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: !Sub 'AspenGroveClient-${Environment}'
+      GenerateSecret: false
+      UserPoolId: !Ref UserPool
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+        - ALLOW_USER_SRP_AUTH
+      PreventUserExistenceErrors: ENABLED
+      AllowedOAuthFlows:
+        - code
+        - implicit
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthScopes:
+        - phone
+        - email
+        - openid
+        - profile
+      CallbackURLs:
+        - !Sub 'https://${DomainName}/callback'
+        - !Sub 'https://${DomainName}/dashboard'
+      SupportedIdentityProviders:
+        - COGNITO
+
+  # Cognito Groups for Role-Based Access Control
+  FirmAdminsGroup:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: FirmAdmins
+      Description: Law firm administrators who can manage users and billing
+      Precedence: 1
+      UserPoolId: !Ref UserPool
+  
+  AttorneysGroup:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: Attorneys
+      Description: Standard attorney users with document and report access
+      Precedence: 2
+      UserPoolId: !Ref UserPool
+      
+  ParalegalsGroup:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: Paralegals
+      Description: Paralegals with limited document access rights
+      Precedence: 3
+      UserPoolId: !Ref UserPool
+
+  #========================================================
+  # API Gateway
+  #========================================================
+  ApiGateway:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: !Sub 'AspenGroveAPI-${Environment}'
+      Description: 'API for Aspen Grove Services'
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+          
+  ApiGatewayResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !GetAtt ApiGateway.RootResourceId
+      PathPart: 'api'
+      
+  UploadUrlResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !Ref ApiGatewayResource
+      PathPart: 'get-upload-url'
+      
+  UploadUrlMethod:
+    Type: AWS::ApiGateway::Method
+    DependsOn: 
+      - GenerateUploadUrlFunction
+      - ApiGatewayAuthorizer
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !Ref UploadUrlResource
+      HttpMethod: POST
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref ApiGatewayAuthorizer
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GenerateUploadUrlFunction.Arn}/invocations'
+        
+  UploadUrlOptions:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !Ref UploadUrlResource
+      HttpMethod: OPTIONS
+      AuthorizationType: NONE
+      Integration:
+        Type: MOCK
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Origin: !Sub "'https://${DomainName}'"
+            ResponseTemplates:
+              application/json: '{}'
+        RequestTemplates:
+          application/json: '{"statusCode": 200}'
+      MethodResponses:
+        - StatusCode: 200
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+      
+  ApiGatewayDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - UploadUrlMethod
+      - UploadUrlOptions
+    Properties:
+      RestApiId: !Ref ApiGateway
+      StageName: !Ref Environment
+      
+  ApiGatewayAuthorizer:
+    Type: AWS::ApiGateway::Authorizer
+    Properties:
+      Name: CognitoUserPoolAuthorizer
+      RestApiId: !Ref ApiGateway
+      Type: COGNITO_USER_POOLS
+      IdentitySource: method.request.header.Authorization
+      ProviderARNs:
+        - !GetAtt UserPool.Arn
+        
+  #========================================================
+  # CloudFront Distribution
+  #========================================================
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: !Sub 'Aspen Grove Services - ${Environment}'
+        Enabled: true
+        DefaultRootObject: index.html
+        PriceClass: PriceClass_100
+        HttpVersion: http2
+        Origins:
+          - Id: WebsiteOrigin
+            DomainName: !GetAtt WebsiteBucket.DomainName
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
+          - Id: ApiOrigin
+            DomainName: !Sub '${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com'
+            OriginPath: !Sub '/${Environment}'
+            CustomOriginConfig:
+              HTTPPort: 80
+              HTTPSPort: 443
+              OriginProtocolPolicy: https-only
+              OriginSSLProtocols:
+                - TLSv1.2
+        DefaultCacheBehavior:
+          TargetOriginId: WebsiteOrigin
+          ViewerProtocolPolicy: redirect-to-https
+          Compress: true
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+        CacheBehaviors:
+          - PathPattern: /api/*
+            TargetOriginId: ApiOrigin
+            ViewerProtocolPolicy: https-only
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+              - PUT
+              - POST
+              - PATCH
+              - DELETE
+            CachedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+            ForwardedValues:
+              QueryString: true
+              Headers:
+                - Authorization
+                - Content-Type
+              Cookies:
+                Forward: all
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
+  
+  CloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub 'Origin Access Identity for ${Environment}'
+
+Outputs:
+  UserPoolId:
+    Description: 'Cognito User Pool ID'
+    Value: !Ref UserPool
+    
+  UserPoolClientId:
+    Description: 'Cognito User Pool Client ID'
+    Value: !Ref UserPoolClient
+    
+  ApiGatewayUrl:
+    Description: 'API Gateway URL'
+    Value: !Sub 'https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/${Environment}'
+    
+  CloudFrontDistributionDomainName:
+    Description: 'CloudFront Distribution Domain Name'
+    Value: !GetAtt CloudFrontDistribution.DomainName
+    
+  ClientUploadsBucketName:
+    Description: 'Client Uploads S3 Bucket Name'
+    Value: !Ref ClientUploadsBucket
+    
+  TemplatesBucketName:
+    Description: 'Templates S3 Bucket Name'
+    Value: !Ref TemplatesBucket
+    
+  CompletedReportsBucketName:
+    Description: 'Completed Reports S3 Bucket Name'
+    Value: !Ref CompletedReportsBucket

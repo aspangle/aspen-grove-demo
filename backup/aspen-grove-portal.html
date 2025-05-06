@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aspen Grove Services - Document Portal</title>
+    <style>
+        /* Base Styles and Variables */
+        :root {
+            --primary-color: #4B6455; /* Deep sage green */
+            --secondary-color: #7D9D7F; /* Medium sage green */
+            --accent-color: #E8B87D; /* Aspen gold/amber */
+            --light-bg: #F4F7F2; /* Light sage background */
+            --white: #FFFFFF; /* Pure white */
+            --dark-text: #2C3A2F; /* Dark green for text */
+            --medium-text: #4A5D4E; /* Medium green for secondary text */
+            --light-gray: #E8EBE4; /* Very light sage for borders */
+            --error-color: #C75146; /* Muted red */
+            --success-color: #5A8F5A; /* Muted green */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+            --border-radius: 6px;
+            --border-radius-lg: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--white);
+            border-right: 1px solid var(--light-gray);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-shadow: var(--shadow-sm);
+            z-index: 10;
+        }
+
+        .logo-container {
+            padding: 24px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 12px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .main-nav {
+            padding: 20px 0;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--medium-text);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(125, 157, 127, 0.1);
+            color: var(--primary-color);
+        }
+
+        .nav-item.active {
+            background-color: rgba(125, 157, 127, 0.15);
+            color: var(--primary-color);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .nav-icon {
+            margin-right: 12px;
+        }
+
+        .nav-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .nav-text {
+            font-weight: 500;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 12px;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: var(--medium-text);
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            color: var(--medium-text);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .logout-link:hover {
+            color: var(--primary-color);
+        }
+
+        .logout-link svg {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            fill: currentColor;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background-color: var(--white);
+            border-bottom: 1px solid var(--light-gray);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            margin-right: 16px;
+        }
+
+        .search-box input {
+            width: 240px;
+            padding: 10px 16px;
+            padding-right: 40px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            transition: var(--transition);
+            color: var(--dark-text);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 2px rgba(125, 157, 127, 0.2);
+        }
+
+        .search-button {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            color: var(--medium-text);
+        }
+
+        .search-button svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .notification-bell {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            color: var(--medium-text);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .notification-bell:hover {
+            background-color: rgba(125, 157, 127, 0.1);
+            color: var(--primary-color);
+        }
+
+        .notification-bell svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background-color: var(--accent-color);
+            color: var(--white);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* Content */
+        .content-wrapper {
+            padding: 30px;
+            flex: 1;
+        }
+
+        .panel {
+            background-color: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .view-all {
+            font-size: 14px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        .panel-body {
+            padding: 20px;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed var(--secondary-color);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            text-align: center;
+            background-color: rgba(125, 157, 127, 0.05);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .upload-area:hover, .upload-area.dragover {
+            background-color: rgba(125, 157, 127, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .upload-icon {
+            margin-bottom: 16px;
+            color: var(--secondary-color);
+        }
+
+        .upload-icon svg {
+            fill: currentColor;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--dark-text);
+        }
+
+        .upload-info {
+            font-size: 14px;
+            color: var(--medium-text);
+        }
+
+        .text-button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .text-button:hover {
+            text-decoration: underline;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* File List */
+        .file-list {
+            margin-top: 24px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            margin-bottom: 12px;
+            background-color: var(--white);
+            transition: var(--transition);
+        }
+
+        .file-item:hover {
+            border-color: var(--secondary-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .file-name {
+            flex: 1;
+            font-weight: 500;
+            color: var(--dark-text);
+        }
+
+        .file-size {
+            color: var(--medium-text);
+            font-size: 14px;
+            margin-right: 16px;
+        }
+
+        .progress-wrapper {
+            width: 200px;
+            margin: 0 16px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: var(--light-gray);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--secondary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .primary-btn {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .primary-btn:hover {
+            background-color: #3d5346;
+        }
+
+        .secondary-btn {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .secondary-btn:hover {
+            background-color: rgba(75, 100, 85, 0.1);
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            color: var(--medium-text);
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .icon-button:hover {
+            background-color: rgba(125, 157, 127, 0.1);
+            color: var(--primary-color);
+        }
+
+        .icon-button svg {
+            fill: currentColor;
+        }
+
+        .upload-actions {
+            margin-top: 24px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* Status Message */
+        .status-message {
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+        }
+
+        .status-success {
+            background-color: rgba(90, 143, 90, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(90, 143, 90, 0.2);
+        }
+
+        .status-error {
+            background-color: rgba(199, 81, 70, 0.1);
+            color: var(--error-color);
+            border: 1px solid rgba(199, 81, 70, 0.2);
+        }
+
+        /* Recent Uploads Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 600;
+            color: var(--medium-text);
+            border-bottom: 2px solid var(--light-gray);
+            font-size: 14px;
+        }
+
+        .data-table td {
+            padding: 16px;
+            border-bottom: 1px solid var(--light-gray);
+            vertical-align: middle;
+        }
+
+        .file-cell {
+            display: flex;
+            align-items: center;
+        }
+
+        .file-icon {
+            width: 32px;
+            height: 32px;
+            margin-right: 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .file-icon.pdf {
+            background-color: #F56565;
+        }
+
+        .file-icon.pdf::before {
+            content: "PDF";
+        }
+
+        .file-icon.docx {
+            background-color: #4299E1;
+        }
+
+        .file-icon.docx::before {
+            content: "DOC";
+        }
+
+        .file-icon.jpg, .file-icon.png {
+            background-color: #48BB78;
+        }
+
+        .file-icon.jpg::before {
+            content: "IMG";
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge.completed {
+            background-color: rgba(90, 143, 90, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-badge.in-progress {
+            background-color: rgba(232, 184, 125, 0.1);
+            color: #B7791F;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 4px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 80px;
+            }
+
+            .logo-text, .nav-text, .user-details, .logout-link span {
+                display: none;
+            }
+
+            .logo-container {
+                justify-content: center;
+                padding: 16px;
+            }
+
+            .logo {
+                margin-right: 0;
+            }
+
+            .nav-item {
+                justify-content: center;
+                padding: 16px;
+            }
+
+            .nav-icon {
+                margin-right: 0;
+            }
+
+            .user-info {
+                justify-content: center;
+            }
+
+            .user-avatar {
+                margin-right: 0;
+            }
+
+            .logout-link {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+                padding: 16px;
+            }
+
+            .content-wrapper {
+                padding: 16px;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .upload-area {
+                padding: 24px;
+            }
+
+            .progress-wrapper {
+                width: 100px;
+            }
+
+            .data-table th:nth-child(3),
+            .data-table td:nth-child(3) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .data-table th:nth-child(2),
+            .data-table td:nth-child(2) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <svg class="logo" width="40" height="40" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background Circle -->
+                    <circle cx="100" cy="100" r="95" fill="#4B6455" stroke="#F4F7F2" stroke-width="2" />
+                    
+                    <!-- Aspen Trees -->
+                    <g id="trees">
+                        <!-- Tree 1 (center) -->
+                        <line x1="100" y1="140" x2="100" y2="60" stroke="#F4F7F2" stroke-width="4" />
+                        <!-- Branches -->
+                        <line x1="100" y1="80" x2="85" y2="65" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="100" y1="90" x2="115" y2="75" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="100" y1="110" x2="80" y2="95" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="100" y1="125" x2="118" y2="110" stroke="#F4F7F2" stroke-width="2" />
+                        
+                        <!-- Tree 2 (left) -->
+                        <line x1="70" y1="145" x2="70" y2="75" stroke="#F4F7F2" stroke-width="4" />
+                        <!-- Branches -->
+                        <line x1="70" y1="85" x2="55" y2="75" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="70" y1="100" x2="85" y2="85" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="70" y1="120" x2="55" y2="105" stroke="#F4F7F2" stroke-width="2" />
+                        
+                        <!-- Tree 3 (right) -->
+                        <line x1="130" y1="145" x2="130" y2="75" stroke="#F4F7F2" stroke-width="4" />
+                        <!-- Branches -->
+                        <line x1="130" y1="90" x2="145" y2="75" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="130" y1="110" x2="115" y2="95" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="130" y1="125" x2="145" y2="110" stroke="#F4F7F2" stroke-width="2" />
+                    </g>
+                    
+                    <!-- Leaves -->
+                    <g id="leaves">
+                        <!-- Center Tree Leaves -->
+                        <circle cx="100" cy="60" r="8" fill="#7D9D7F" />
+                        <circle cx="85" cy="65" r="6" fill="#7D9D7F" />
+                        <circle cx="115" cy="75" r="7" fill="#7D9D7F" />
+                        <circle cx="80" cy="95" r="6" fill="#7D9D7F" />
+                        <circle cx="118" cy="110" r="6" fill="#7D9D7F" />
+                        
+                        <!-- Left Tree Leaves -->
+                        <circle cx="70" cy="75" r="7" fill="#7D9D7F" />
+                        <circle cx="55" cy="75" r="6" fill="#7D9D7F" />
+                        <circle cx="85" cy="85" r="6" fill="#7D9D7F" />
+                        <circle cx="55" cy="105" r="6" fill="#7D9D7F" />
+                        
+                        <!-- Right Tree Leaves -->
+                        <circle cx="130" cy="75" r="7" fill="#7D9D7F" />
+                        <circle cx="145" cy="75" r="6" fill="#7D9D7F" />
+                        <circle cx="115" cy="95" r="6" fill="#7D9D7F" />
+                        <circle cx="145" cy="110" r="6" fill="#7D9D7F" />
+                    </g>
+                    
+                    <!-- Root System -->
+                    <path d="M60,145 C70,160 90,165 100,160 C110,165 130,160 140,145" stroke="#F4F7F2" stroke-width="3" fill="none" />
+                    
+                    <!-- Accent Elements -->
+                    <circle cx="145" cy="75" r="2" fill="#E8B87D" />
+                    <circle cx="85" cy="65" r="2" fill="#E8B87D" />
+                    <circle cx="55" cy="105" r="2" fill="#E8B87D" />
+                    <circle cx="118" cy="110" r="2" fill="#E8B87D" />
+                </svg>
+                <h1 class="logo-text">Aspen Grove Services</h1>
+            </div>
+            <nav class="main-nav">
+                <a href="#dashboard" class="nav-item">
+                    <span class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                    </span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="#upload" class="nav-item active">
+                    <span class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M9 16h6v-6h4l-7-7-7 7h4z"/><path d="M5 18h14v2H5z"/></svg>
+                    </span>
+                    <span class="nav-text">Document Upload</span>
+                </a>
+                <a href="#cases" class="nav-item">
+                    <span class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                    </span>
+                    <span class="nav-text">My Cases</span>
+                </a>
+                <a href="#reports" class="nav-item">
+                    <span class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                    </span>
+                    <span class="nav-text">Reports</span>
+                </a>
+                <a href="#settings" class="nav-item">
+                    <span class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                    </span>
+                    <span class="nav-text">Settings</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">JS</div>
+                    <div class="user-details">
+                        <div class="user-name" id="user-name">John Smith</div>
+                        <div class="user-role" id="user-role">Professional</div>
+                    </div>
+                </div>
+                <a href="#logout" class="logout-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <h2 class="page-title">Document Upload</h2>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <input type="text" placeholder="Search...">
+                        <button class="search-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        </button>
+                    </div>
+                    <div class="notifications">
+                        <button class="notification-bell">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>
+                            <span class="notification-badge">3</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            <div class="content-wrapper">
+                <section class="upload-section">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">Upload Documents</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="upload-area" id="upload-area">
+                                <div class="upload-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48"><path fill="none" d="M0 0h24v24H0z"/><path d="M9 16h6v-6h4l-7-7-7 7h4z"/><path d="M5 18h14v2H5z"/></svg>
+                                </div>
+                                <p class="upload-text">Drag and drop files here or <button class="text-button">browse</button> to upload</p>
+                                <p class="upload-info">Supports PDF, DOCX, JPEG, PNG (Max 50MB per file)</p>
+                                <input type="file" id="file-input" class="file-input" multiple>
+                            </div>
+                            <div class="file-list" id="file-list">
+                                <!-- File items will be added here dynamically -->
+                            </div>
+                            <div class="upload-actions">
+                                <button id="upload-button" class="btn primary-btn" style="display: none;">
+                                    Upload All Files
+                                </button>
+                            </div>
+                            <div id="status-message" class="status-message" style="display: none;"></div>
+                        </div>
+                    </div>
+                </section>
+                <section class="recent-uploads">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">Recent Uploads</h3>
+                            <a href="#view-all" class="view-all">View All</a>
+                        </div>
+                        <div class="panel-body">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Filename</th>
+                                        <th>Date Uploaded</th>
+                                        <th>Size</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-files-table">
+                                    <!-- Table will be populated by JavaScript based on user type -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Detect user type (this would normally come from authentication)
+            const userType = getQueryParam('type') || localStorage.getItem('userType') || 'default';
+            
+            // Store user type for future page loads
+            localStorage.setItem('userType', userType);
+            
+            // Set up user profile based on type
+            configureForUserType(userType);
+            
+            // Standard upload functionality
+            const uploadArea = document.getElementById('upload-area');
+            const fileInput = document.getElementById('file-input');
+            const fileList = document.getElementById('file-list');
+            const uploadButton = document.getElementById('upload-button');
+            const statusMessage = document.getElementById('status-message');
+            const selectedFiles = [];
+
+            // Handle file selection button click
+            document.querySelector('.text-button').addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            // Handle file selection changes
+            fileInput.addEventListener('change', (e) => {
+                addFiles(e.target.files);
+            });
+
+            // Drag and drop functionality
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, () => {
+                    uploadArea.classList.add('dragover');
+                });
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, () => {
+                    uploadArea.classList.remove('dragover');
+                });
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                const files = e.dataTransfer.files;
+                addFiles(files);
+            });
+
+            // Add files to the list
+            function addFiles(files) {
+                for (const file of files) {
+                    // Check if file is already in the list
+                    if (selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                        continue;
+                    }
+
+                    // Check file size (max 50MB)
+                    if (file.size > 50 * 1024 * 1024) {
+                        showStatus(`File ${file.name} exceeds the 50MB limit.`, 'error');
+                        continue;
+                    }
+
+                    // Check file type
+                    const fileType = file.type.toLowerCase();
+                    const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png'];
+                    
+                    if (!validTypes.includes(fileType)) {
+                        showStatus(`File ${file.name} is not a supported format.`, 'error');
+                        continue;
+                    }
+
+                    selectedFiles.push(file);
+
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    
+                    const fileName = document.createElement('div');
+                    fileName.className = 'file-name';
+                    fileName.textContent = file.name;
+                    
+                    const fileSize = document.createElement('div');
+                    fileSize.className = 'file-size';
+                    fileSize.textContent = formatSize(file.size);
+                    
+                    const progressWrapper = document.createElement('div');
+                    progressWrapper.className = 'progress-wrapper';
+                    
+                    const progressBar = document.createElement('div');
+                    progressBar.className = 'progress-bar';
+                    
+                    const progress = document.createElement('div');
+                    progress.className = 'progress';
+                    
+                    progressBar.appendChild(progress);
+                    progressWrapper.appendChild(progressBar);
+                    
+                    const removeButton = document.createElement('button');
+                    removeButton.className = 'icon-button';
+                    removeButton.title = 'Remove';
+                    removeButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>';
+                    
+                    removeButton.addEventListener('click', () => {
+                        const index = selectedFiles.indexOf(file);
+                        if (index > -1) {
+                            selectedFiles.splice(index, 1);
+                        }
+                        fileItem.remove();
+                        updateUploadButton();
+                    });
+                    
+                    fileItem.appendChild(fileName);
+                    fileItem.appendChild(fileSize);
+                    fileItem.appendChild(progressWrapper);
+                    fileItem.appendChild(removeButton);
+                    
+                    fileList.appendChild(fileItem);
+                }
+                
+                updateUploadButton();
+            }
+
+            function updateUploadButton() {
+                if (selectedFiles.length > 0) {
+                    uploadButton.style.display = 'block';
+                } else {
+                    uploadButton.style.display = 'none';
+                }
+            }
+
+            function formatSize(bytes) {
+                if (bytes < 1024) {
+                    return bytes + ' bytes';
+                } else if (bytes < 1024 * 1024) {
+                    return (bytes / 1024).toFixed(1) + ' KB';
+                } else {
+                    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+                }
+            }
+
+            function showStatus(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = 'status-message';
+                if (type) {
+                    statusMessage.classList.add(`status-${type}`);
+                }
+                statusMessage.style.display = 'block';
+                
+                // Auto-hide success messages after 5 seconds
+                if (type === 'success') {
+                    setTimeout(() => {
+                        statusMessage.style.display = 'none';
+                    }, 5000);
+                }
+            }
+
+            // Configure interface based on user type
+            function configureForUserType(userType) {
+                // Set user name and role
+                const userName = document.getElementById('user-name');
+                const userRole = document.getElementById('user-role');
+                
+                // Default content for recent files table
+                const recentFilesTable = document.getElementById('recent-files-table');
+                
+                // Configure per user type
+                switch(userType) {
+                    case 'legal':
+                        userName.textContent = 'John Smith';
+                        userRole.textContent = 'Attorney';
+                        recentFilesTable.innerHTML = `
+                            <tr>
+                                <td>
+                                    <div class="file-cell">
+                                        <div class="file-icon pdf"></div>
+                                        <span>Medical_Records_Johnson.pdf</span>
+                                    </div>
+                                </td>
+                                <td>Apr 28, 2025</td>
+                                <td>3.4 MB</td>
+                                <td><span class="status-badge completed">Processed</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="icon-button" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Download">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="file-cell">
+                                        <div class="file-icon docx"></div>
+                                        <span>Disability_Application.docx</span>
+                                    </div>
+                                </td>
+                                <td>Apr 27, 2025</td>
+                                <td>245 KB</td>
+                                <td><span class="status-badge completed">Processed</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="icon-button" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Download">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="file-cell">
+                                        <div class="file-icon jpg"></div>
+                                        <span>Employment_Verification.jpg</span>
+                                    </div>
+                                </td>
+                                <td>Apr 25, 2025</td>
+                                <td>1.2 MB</td>
+                                <td><span class="status-badge in-progress">Analyzing</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="icon-button" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Download">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        break;
+                    case 'medical':
+                        userName.textContent = 'Dr. Sarah Johnson';
+                        userRole.textContent = 'Medical Professional';
+                        recentFilesTable.innerHTML = `
+                            <tr>
+                                <td>
+                                    <div class="file-cell">
+                                        <div class="file-icon pdf"></div>
+                                        <span>Patient_Records_Smith.pdf</span>
+                                    </div>
+                                </td>
+                                <td>Apr 28, 2025</td>
+                                <td>4.2 MB</td>
+                                <td><span class="status-badge completed">Processed</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="icon-button" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Download">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="file-cell">
+                                        <div class="file-icon pdf"></div>
+                                        <span>Lab_Results_Williams.pdf</span>
+                                    </div>
+                                </td>
+                                <td>Apr 27, 2025</td>
+                                <td>2.1 MB</td>
+                                <td><span class="status-badge completed">Processed</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="icon-button" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Download">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="file-cell">
+                                        <div class="file-icon jpg"></div>
+                                        <span>X-Ray_Left_Knee.jpg</span>
+                                    </div>
+                                </td>
+                                <td>Apr 25, 2025</td>
+                                <td>3.8 MB</td>
+                                <td><span class="status-badge in-progress">Analyzing</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="icon-button" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Download">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        break;
+                    case 'ssdi':
+                        userName.textContent = 'Robert Adams';
+                        userRole.textContent = 'SSDI Specialist';
+                        recentFilesTable.innerHTML = `
+                            <tr>
+                                <td>
+                                    <div class="file-cell">
+                                        <div class="file-icon pdf"></div>
+                                        <span>Medical_Assessment_Thomas.pdf</span>
+                                    </div>
+                                </td>
+                                <td>Apr 28, 2025</td>
+                                <td>2.7 MB</td>
+                                <td><span class="status-badge completed">Processed</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="icon-button" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Download">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="file-cell">
+                                        <div class="file-icon docx"></div>
+                                        <span>RFC_Analysis_Davis.docx</span>
+                                    </div>
+                                </td>
+                                <td>Apr 27, 2025</td>
+                                <td>342 KB</td>
+                                <td><span class="status-badge completed">Processed</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="icon-button" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Download">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="file-cell">
+                                        <div class="file-icon pdf"></div>
+                                        <span>Work_History_Garcia.pdf</span>
+                                    </div>
+                                </td>
+                                <td>Apr 25, 2025</td>
+                                <td>1.5 MB</td>
+                                <td><span class="status-badge in-progress">Analyzing</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="icon-button" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Download">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        break;
+                    // Default case without profession-specific customization
+                    default:
+                        userName.textContent = 'John Smith';
+                        userRole.textContent = 'Professional';
+                        recentFilesTable.innerHTML = `
+                            <tr>
+                                <td>
+                                    <div class="file-cell">
+                                        <div class="file-icon pdf"></div>
+                                        <span>Client_Records.pdf</span>
+                                    </div>
+                                </td>
+                                <td>Apr 28, 2025</td>
+                                <td>2.5 MB</td>
+                                <td><span class="status-badge completed">Processed</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="icon-button" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Download">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="file-cell">
+                                        <div class="file-icon docx"></div>
+                                        <span>Analysis_Report.docx</span>
+                                    </div>
+                                </td>
+                                <td>Apr 27, 2025</td>
+                                <td>245 KB</td>
+                                <td><span class="status-badge completed">Processed</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="icon-button" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Download">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="file-cell">
+                                        <div class="file-icon jpg"></div>
+                                        <span>Supporting_Evidence.jpg</span>
+                                    </div>
+                                </td>
+                                <td>Apr 25, 2025</td>
+                                <td>1.2 MB</td>
+                                <td><span class="status-badge in-progress">Analyzing</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="icon-button" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Download">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                        </button>
+                                        <button class="icon-button" title="Delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        break;
+                }
+            }
+
+            // Helper function to get query parameters
+            function getQueryParam(param) {
+                var urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
+
+            // Simulate upload process (this will be replaced with AWS S3 uploads later)
+            uploadButton.addEventListener('click', () => {
+                if (selectedFiles.length === 0) return;
+                
+                showStatus('Uploading files...', '');
+                
+                // Disable the upload button during upload
+                uploadButton.disabled = true;
+                
+                // Get all progress elements
+                const progressElements = fileList.querySelectorAll('.progress');
+                
+                // Simulate progress for each file
+                let completedFiles = 0;
+                
+                selectedFiles.forEach((file, index) => {
+                    const progressElement = progressElements[index];
+                    
+                    // Simulate upload progress
+                    let progress = 0;
+                    const interval = setInterval(() => {
+                        progress += Math.random() * 5;
+                        
+                        if (progress > 100) {
+                            progress = 100;
+                            clearInterval(interval);
+                            completedFiles++;
+                            
+                            // Check if all uploads are complete
+                            if (completedFiles === selectedFiles.length) {
+                                setTimeout(() => {
+                                    showStatus('All files uploaded successfully!', 'success');
+                                    uploadButton.disabled = false;
+                                    
+                                    // Clear file list after successful upload
+                                    setTimeout(() => {
+                                        fileList.innerHTML = '';
+                                        selectedFiles.length = 0;
+                                        updateUploadButton();
+                                    }, 3000);
+                                }, 500);
+                            }
+                        }
+                        
+                        progressElement.style.width = progress + '%';
+                    }, 100);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

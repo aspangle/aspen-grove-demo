@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Storage | Aspen Grove Services</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4B6455;
+            --primary-light: #5d7a69;
+            --secondary-color: #7D9D7F;
+            --accent-color: #E8B87D;
+            --accent-dark: #d9a76c;
+            --light-bg: #F4F7F2;
+            --white: #FFFFFF;
+            --dark-text: #2C3A2F;
+            --medium-text: #4A5D4E;
+            --light-gray: #E8EBE4;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+            --border-radius: 6px;
+            --border-radius-lg: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .storage-dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .sidebar {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 2rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-menu a {
+            color: var(--white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .sidebar-menu a:hover {
+            background: var(--primary-light);
+        }
+
+        .main-content {
+            padding: 2rem;
+        }
+
+        .storage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--accent-color);
+            color: var(--dark-text);
+        }
+
+        .btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+        }
+
+        .storage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .storage-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .storage-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .storage-icon {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .storage-name {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .storage-meta {
+            font-size: 0.9rem;
+            color: var(--medium-text);
+        }
+
+        .file-list {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            margin-top: 2rem;
+        }
+
+        .file-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+            align-items: center;
+        }
+
+        .file-icon {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        .file-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .file-name {
+            font-weight: 500;
+        }
+
+        .file-meta {
+            font-size: 0.9rem;
+            color: var(--medium-text);
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.25rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--medium-text);
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            color: var(--accent-color);
+        }
+
+        .upload-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-modal.active {
+            display: flex;
+        }
+
+        .upload-form {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--light-gray);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .drop-zone:hover {
+            border-color: var(--accent-color);
+        }
+
+        .drop-zone i {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .storage-dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .search-bar {
+                max-width: none;
+            }
+
+            .storage-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="storage-dashboard">
+            <div class="sidebar">
+                <h2>Data Storage</h2>
+                <ul class="sidebar-menu">
+                    <li><a href="#"><i class="fas fa-folder"></i> All Files</a></li>
+                    <li><a href="#"><i class="fas fa-file-alt"></i> Documents</a></li>
+                    <li><a href="#"><i class="fas fa-image"></i> Images</a></li>
+                    <li><a href="#"><i class="fas fa-video"></i> Videos</a></li>
+                    <li><a href="#"><i class="fas fa-star"></i> Starred</a></li>
+                    <li><a href="#"><i class="fas fa-trash"></i> Trash</a></li>
+                </ul>
+            </div>
+            <div class="main-content">
+                <div class="storage-header">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search files...">
+                        <button class="btn"><i class="fas fa-search"></i></button>
+                    </div>
+                    <button class="btn" onclick="toggleUpload()">
+                        <i class="fas fa-upload"></i> Upload
+                    </button>
+                </div>
+                <div class="storage-grid">
+                    <div class="storage-card">
+                        <div class="storage-icon">
+                            <i class="fas fa-folder"></i>
+                        </div>
+                        <div class="storage-name">Case Files</div>
+                        <div class="storage-meta">245 items</div>
+                    </div>
+                    <div class="storage-card">
+                        <div class="storage-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="storage-name">Reports</div>
+                        <div class="storage-meta">89 items</div>
+                    </div>
+                    <div class="storage-card">
+                        <div class="storage-icon">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div class="storage-name">Images</div>
+                        <div class="storage-meta">156 items</div>
+                    </div>
+                    <div class="storage-card">
+                        <div class="storage-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="storage-name">Videos</div>
+                        <div class="storage-meta">23 items</div>
+                    </div>
+                </div>
+                <div class="file-list">
+                    <div class="file-item">
+                        <div class="file-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name">Smith_vs_Johnson_Case_Report.pdf</div>
+                            <div class="file-meta">2.4 MB • Updated 2 hours ago</div>
+                        </div>
+                        <div class="file-actions">
+                            <button class="action-btn"><i class="fas fa-download"></i></button>
+                            <button class="action-btn"><i class="fas fa-share"></i></button>
+                            <button class="action-btn"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <!-- Add more file items here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="upload-modal" id="uploadModal">
+        <div class="upload-form">
+            <h2>Upload Files</h2>
+            <div class="drop-zone" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Drag and drop files here or click to browse</p>
+                <input type="file" id="fileInput" style="display: none" multiple>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn" onclick="toggleUpload()">Cancel</button>
+                <button type="submit" class="btn">Upload</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleUpload() {
+            const modal = document.getElementById('uploadModal');
+            modal.classList.toggle('active');
+        }
+
+        // Drag and drop functionality
+        const dropZone = document.querySelector('.drop-zone');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            dropZone.classList.add('active');
+        }
+
+        function unhighlight(e) {
+            dropZone.classList.remove('active');
+        }
+
+        dropZone.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            // Handle the uploaded files here
+            console.log(files);
+        }
+    </script>
+</body>
+</html> 

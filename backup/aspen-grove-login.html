@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aspen Grove Services - Login</title>
+    <style>
+        /* Base Styles and Variables */
+        :root {
+            --primary-color: #4B6455; /* Deep sage green */
+            --secondary-color: #7D9D7F; /* Medium sage green */
+            --accent-color: #E8B87D; /* Aspen gold/amber */
+            --light-bg: #F4F7F2; /* Light sage background */
+            --white: #FFFFFF; /* Pure white */
+            --dark-text: #2C3A2F; /* Dark green for text */
+            --medium-text: #4A5D4E; /* Medium green for secondary text */
+            --light-gray: #E8EBE4; /* Very light sage for borders */
+            --error-color: #C75146; /* Muted red */
+            --success-color: #5A8F5A; /* Muted green */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+            --border-radius: 6px;
+            --border-radius-lg: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            background-color: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .login-header {
+            background-color: var(--primary-color);
+            padding: 20px;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .header-text {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--dark-text);
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-size: 15px;
+            color: var(--dark-text);
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 2px rgba(125, 157, 127, 0.2);
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-input {
+            margin-right: 6px;
+            cursor: pointer;
+        }
+
+        .checkbox-label {
+            font-size: 14px;
+            color: var(--medium-text);
+        }
+
+        .forgot-password {
+            font-size: 14px;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #3d5346;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            margin-top: 10px;
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(75, 100, 85, 0.1);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: var(--medium-text);
+            font-size: 14px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background-color: var(--light-gray);
+        }
+
+        .divider::before {
+            margin-right: 10px;
+        }
+
+        .divider::after {
+            margin-left: 10px;
+        }
+
+        .mfa-info {
+            background-color: rgba(125, 157, 127, 0.1);
+            border-radius: var(--border-radius);
+            padding: 12px 15px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-icon {
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+
+        .info-text {
+            font-size: 14px;
+            color: var(--dark-text);
+        }
+
+        .login-footer {
+            text-align: center;
+            padding: 20px 30px;
+            background-color: var(--light-bg);
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .signup-text {
+            font-size: 14px;
+            color: var(--medium-text);
+            margin-bottom: 10px;
+        }
+
+        .security-badges {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 15px;
+        }
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: var(--medium-text);
+        }
+
+        .security-badge svg {
+            margin-right: 5px;
+            width: 16px;
+            height: 16px;
+            fill: var(--primary-color);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .join-firm-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--light-gray);
+            font-size: 14px;
+            color: var(--medium-text);
+            text-align: center;
+        }
+
+        .join-firm-text {
+            margin-bottom: 10px;
+        }
+
+        .join-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .join-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                max-width: 100%;
+            }
+
+            .form-footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .security-badges {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="logo-container">
+                <!-- Use an SVG for the logo -->
+                <svg class="logo" width="40" height="40" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background Circle -->
+                    <circle cx="100" cy="100" r="95" fill="#4B6455" stroke="#F4F7F2" stroke-width="2" />
+                    
+                    <!-- Aspen Trees -->
+                    <g id="trees">
+                        <!-- Tree 1 (center) -->
+                        <line x1="100" y1="140" x2="100" y2="60" stroke="#F4F7F2" stroke-width="4" />
+                        <!-- Branches -->
+                        <line x1="100" y1="80" x2="85" y2="65" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="100" y1="90" x2="115" y2="75" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="100" y1="110" x2="80" y2="95" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="100" y1="125" x2="118" y2="110" stroke="#F4F7F2" stroke-width="2" />
+                        
+                        <!-- Tree 2 (left) -->
+                        <line x1="70" y1="145" x2="70" y2="75" stroke="#F4F7F2" stroke-width="4" />
+                        <!-- Branches -->
+                        <line x1="70" y1="85" x2="55" y2="75" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="70" y1="100" x2="85" y2="85" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="70" y1="120" x2="55" y2="105" stroke="#F4F7F2" stroke-width="2" />
+                        
+                        <!-- Tree 3 (right) -->
+                        <line x1="130" y1="145" x2="130" y2="75" stroke="#F4F7F2" stroke-width="4" />
+                        <!-- Branches -->
+                        <line x1="130" y1="90" x2="145" y2="75" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="130" y1="110" x2="115" y2="95" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="130" y1="125" x2="145" y2="110" stroke="#F4F7F2" stroke-width="2" />
+                    </g>
+                    
+                    <!-- Leaves -->
+                    <g id="leaves">
+                        <!-- Center Tree Leaves -->
+                        <circle cx="100" cy="60" r="8" fill="#7D9D7F" />
+                        <circle cx="85" cy="65" r="6" fill="#7D9D7F" />
+                        <circle cx="115" cy="75" r="7" fill="#7D9D7F" />
+                        <circle cx="80" cy="95" r="6" fill="#7D9D7F" />
+                        <circle cx="118" cy="110" r="6" fill="#7D9D7F" />
+                        
+                        <!-- Left Tree Leaves -->
+                        <circle cx="70" cy="75" r="7" fill="#7D9D7F" />
+                        <circle cx="55" cy="75" r="6" fill="#7D9D7F" />
+                        <circle cx="85" cy="85" r="6" fill="#7D9D7F" />
+                        <circle cx="55" cy="105" r="6" fill="#7D9D7F" />
+                        
+                        <!-- Right Tree Leaves -->
+                        <circle cx="130" cy="75" r="7" fill="#7D9D7F" />
+                        <circle cx="145" cy="75" r="6" fill="#7D9D7F" />
+                        <circle cx="115" cy="95" r="6" fill="#7D9D7F" />
+                        <circle cx="145" cy="110" r="6" fill="#7D9D7F" />
+                    </g>
+                    
+                    <!-- Root System -->
+                    <path d="M60,145 C70,160 90,165 100,160 C110,165 130,160 140,145" stroke="#F4F7F2" stroke-width="3" fill="none" />
+                    
+                    <!-- Accent Elements -->
+                    <circle cx="145" cy="75" r="2" fill="#E8B87D" />
+                    <circle cx="85" cy="65" r="2" fill="#E8B87D" />
+                    <circle cx="55" cy="105" r="2" fill="#E8B87D" />
+                    <circle cx="118" cy="110" r="2" fill="#E8B87D" />
+                </svg>
+                <span class="logo-text">Aspen Grove Services</span>
+            </div>
+            <p class="header-text">Secure Document Analysis Platform</p>
+        </div>
+        
+        <div class="form-container">
+            <form id="login-form">
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        class="form-input" 
+                        placeholder="you@example.com" 
+                        required
+                    >
+                    <div class="error-message" id="email-error">Please enter a valid email address</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        class="form-input" 
+                        placeholder="••••••••••••"
+                        required
+                    >
+                    <div class="error-message" id="password-error">Password must be at least 8 characters</div>
+                </div>
+                
+                <div class="form-footer">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember" class="checkbox-input">
+                        <label for="remember" class="checkbox-label">Remember me</label>
+                    </div>
+                    <a href="#forgot-password" class="forgot-password">Forgot password?</a>
+                </div>
+                
+                <button type="submit" class="btn">Sign In</button>
+                
+                <div class="mfa-info">
+                    <span class="info-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                        </svg>
+                    </span>
+                    <span class="info-text">
+                        Your organization administrator can manage access for other members of your team.
+                    </span>
+                </div>
+                
+                <div class="join-firm-section">
+                    <p class="join-firm-text">Have an organization invitation code?</p>
+                    <a href="join-firm.html" class="join-link">Join your organization's account</a>
+                </div>
+            </form>
+        </div>
+        
+        <div class="login-footer">
+            <p class="signup-text">Don't have an account?</p>
+            <a href="aspen-grove-register.html" class="btn btn-outline">Create Account</a>
+            
+            <div class="security-badges">
+                <div class="security-badge">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+                    </svg>
+                    HIPAA Compliant
+                </div>
+                <div class="security-badge">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/>
+                    </svg>
+                    AWS Security
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('login-form');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const emailError = document.getElementById('email-error');
+            const passwordError = document.getElementById('password-error');
+            
+            // Form validation
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                let isValid = true;
+                
+                // Validate email
+                if (!emailInput.value.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
+                    emailError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    emailError.style.display = 'none';
+                }
+                
+                // Validate password
+                if (passwordInput.value.length < 8) {
+                    passwordError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    passwordError.style.display = 'none';
+                }
+                
+                // If form is valid, submit
+                if (isValid) {
+                    // This would normally submit to your AWS Cognito authentication endpoint
+                    console.log('Form is valid, submitting...');
+                    
+                    // In a real implementation, you'd use AWS Amplify Auth or Cognito SDK
+                    // For demo purposes, redirect to dashboard
+                    setTimeout(() => {
+                        // Authenticate with Cognito and check user's group
+                        // Based on group membership, direct to appropriate dashboard
+                        const userRole = getUserRoleFromCognito(emailInput.value);
+                        const userType = detectUserType(emailInput.value);
+                        
+                        if (userRole === 'Admin') {
+                            window.location.href = 'admin-dashboard.html';
+                        } else {
+                            window.location.href = `${userType}-portal.html`;
+                        }
+                    }, 1000);
+                }
+            });
+            
+            // Clear errors on input
+            emailInput.addEventListener('input', function() {
+                emailError.style.display = 'none';
+            });
+            
+            passwordInput.addEventListener('input', function() {
+                passwordError.style.display = 'none';
+            });
+            
+            // This would be replaced with actual Cognito authentication in production
+            function getUserRoleFromCognito(email) {
+                // Mock implementation - in production, this would check Cognito groups
+                if (email.includes('admin')) {
+                    return 'Admin';
+                } else {
+                    return 'User';
+                }
+            }
+            
+            // Detect user type based on email domain or other attributes
+            function detectUserType(email) {
+                // Mock implementation - in production, this would be based on Cognito user attributes
+                if (email.includes('law') || email.includes('legal')) {
+                    return 'legal';
+                } else if (email.includes('med') || email.includes('health')) {
+                    return 'medical';
+                } else if (email.includes('ssdi') || email.includes('social')) {
+                    return 'ssdi';
+                } else {
+                    return 'default';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

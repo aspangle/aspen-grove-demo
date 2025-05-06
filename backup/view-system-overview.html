@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aspen Grove Services - System Overview</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        .mermaid {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Aspen Grove Services - Complete System Overview</h1>
+
+        <h2>1. System Architecture Overview</h2>
+        <div class="mermaid">
+            graph TB
+                subgraph "Client Portals"
+                    A1[Attorney Portal]
+                    A2[Company Portal]
+                end
+
+                subgraph "Core Services"
+                    B1[Document Management]
+                    B2[Report Generation]
+                    B3[Case Management]
+                    B4[Billing & Analytics]
+                end
+
+                subgraph "Infrastructure"
+                    C1[AWS Cloud]
+                    C2[Security Layer]
+                    C3[Database Layer]
+                end
+
+                A1 --> B1
+                A1 --> B2
+                A1 --> B3
+                A1 --> B4
+
+                A2 --> B1
+                A2 --> B2
+                A2 --> B3
+                A2 --> B4
+
+                B1 --> C1
+                B2 --> C1
+                B3 --> C1
+                B4 --> C1
+
+                C1 --> C2
+                C1 --> C3
+        </div>
+
+        <h2>2. Value Proposition Matrix</h2>
+        <h3>For Attorneys</h3>
+        <table>
+            <tr>
+                <th>Feature</th>
+                <th>Benefit</th>
+                <th>Impact</th>
+            </tr>
+            <tr>
+                <td>Instant Access</td>
+                <td>Single platform access</td>
+                <td>80% time reduction</td>
+            </tr>
+            <tr>
+                <td>Automated Processing</td>
+                <td>Streamlined workflow</td>
+                <td>40% more cases</td>
+            </tr>
+            <tr>
+                <td>Quick Turnaround</td>
+                <td>Faster service</td>
+                <td>30% faster resolution</td>
+            </tr>
+            <tr>
+                <td>Scalable Operations</td>
+                <td>Growth without overhead</td>
+                <td>$10K monthly savings</td>
+            </tr>
+        </table>
+
+        <h3>For Companies</h3>
+        <table>
+            <tr>
+                <th>Feature</th>
+                <th>Benefit</th>
+                <th>Impact</th>
+            </tr>
+            <tr>
+                <td>Automated Processing</td>
+                <td>Increased capacity</td>
+                <td>200% more reports</td>
+            </tr>
+            <tr>
+                <td>24/7 Availability</td>
+                <td>Continuous operation</td>
+                <td>3x faster service</td>
+            </tr>
+            <tr>
+                <td>Market Expansion</td>
+                <td>New client acquisition</td>
+                <td>$50K monthly growth</td>
+            </tr>
+            <tr>
+                <td>Service Diversification</td>
+                <td>New revenue streams</td>
+                <td>400% annual ROI</td>
+            </tr>
+        </table>
+
+        <h2>3. Implementation Timeline</h2>
+        <div class="mermaid">
+            gantt
+                title Implementation Phases
+                dateFormat  YYYY-MM-DD
+                section Foundation
+                Infrastructure Setup    :2024-01-01, 30d
+                Authentication System   :2024-01-15, 30d
+                Basic Portals          :2024-02-01, 45d
+                section Core Features
+                Document Management    :2024-03-01, 45d
+                Report Generation      :2024-03-15, 45d
+                Case Management        :2024-04-01, 30d
+                section Advanced Features
+                Analytics             :2024-05-01, 30d
+                Custom Workflows      :2024-05-15, 30d
+                Enhanced Security     :2024-06-01, 30d
+        </div>
+
+        <h2>4. Key Performance Indicators</h2>
+        <h3>Attorney Metrics</h3>
+        <div class="mermaid">
+            pie title Attorney Benefits
+                "Time Savings" : 80
+                "Case Volume" : 40
+                "Resolution Time" : 30
+                "Admin Tasks" : 5
+        </div>
+
+        <h3>Company Metrics</h3>
+        <div class="mermaid">
+            pie title Company Benefits
+                "Processing Capacity" : 200
+                "Cost Reduction" : 40
+                "Service Speed" : 300
+                "Revenue Growth" : 400
+        </div>
+
+        <h2>5. System Components</h2>
+        <h3>5.1 Attorney Portal</h3>
+        <ul>
+            <li>Document Management</li>
+            <li>Case Tracking</li>
+            <li>Report Requests</li>
+            <li>Billing & Payments</li>
+            <li>Legal Resources</li>
+            <li>Communication System</li>
+        </ul>
+
+        <h3>5.2 Company Portal</h3>
+        <ul>
+            <li>Client Management</li>
+            <li>Report Generation</li>
+            <li>Team Management</li>
+            <li>Billing & Invoicing</li>
+            <li>Analytics & Reporting</li>
+            <li>Service Configuration</li>
+        </ul>
+
+        <h3>5.3 Shared Infrastructure</h3>
+        <ul>
+            <li>Authentication Service</li>
+            <li>Document Storage</li>
+            <li>Notification System</li>
+            <li>API Gateway</li>
+            <li>Analytics Engine</li>
+        </ul>
+
+        <h2>6. Security & Compliance</h2>
+        <h3>6.1 Data Protection</h3>
+        <ul>
+            <li>HIPAA Compliance</li>
+            <li>End-to-End Encryption</li>
+            <li>Access Control</li>
+            <li>Audit Logging</li>
+        </ul>
+
+        <h3>6.2 Infrastructure Security</h3>
+        <ul>
+            <li>AWS Security Groups</li>
+            <li>Network Isolation</li>
+            <li>Regular Backups</li>
+            <li>Disaster Recovery</li>
+        </ul>
+
+        <h2>7. Business Impact</h2>
+        <h3>7.1 For Attorneys</h3>
+        <ul>
+            <li>80% reduction in document handling</li>
+            <li>40% increase in case capacity</li>
+            <li>30% faster case resolution</li>
+            <li>$10,000 monthly savings</li>
+        </ul>
+
+        <h3>7.2 For Companies</h3>
+        <ul>
+            <li>200% processing capacity increase</li>
+            <li>40% operational cost reduction</li>
+            <li>3x faster service delivery</li>
+            <li>$50,000 monthly revenue growth</li>
+        </ul>
+
+        <h2>8. Future Roadmap</h2>
+        <h3>Phase 1 (Q1 2024)</h3>
+        <ul>
+            <li>Basic infrastructure</li>
+            <li>Core portals</li>
+            <li>Essential features</li>
+        </ul>
+
+        <h3>Phase 2 (Q2 2024)</h3>
+        <ul>
+            <li>Advanced analytics</li>
+            <li>Custom workflows</li>
+            <li>Enhanced security</li>
+        </ul>
+
+        <h3>Phase 3 (Q3 2024)</h3>
+        <ul>
+            <li>AI integration</li>
+            <li>Advanced reporting</li>
+            <li>Market expansion</li>
+        </ul>
+
+        <h2>9. Success Metrics</h2>
+        <h3>9.1 Performance Indicators</h3>
+        <ul>
+            <li>System uptime: 99.9%</li>
+            <li>Report generation time: < 24 hours</li>
+            <li>User satisfaction: > 95%</li>
+            <li>Cost reduction: 40%</li>
+        </ul>
+
+        <h3>9.2 Business Metrics</h3>
+        <ul>
+            <li>Revenue growth: 200%</li>
+            <li>Client retention: 95%</li>
+            <li>Market expansion: 3x</li>
+            <li>ROI: 300-400%</li>
+        </ul>
+
+        <h2>10. Support & Maintenance</h2>
+        <h3>10.1 Technical Support</h3>
+        <ul>
+            <li>24/7 system monitoring</li>
+            <li>Automated backups</li>
+            <li>Regular updates</li>
+            <li>Performance optimization</li>
+        </ul>
+
+        <h3>10.2 Business Support</h3>
+        <ul>
+            <li>Client onboarding</li>
+            <li>Training programs</li>
+            <li>Documentation</li>
+            <li>Best practices</li>
+        </ul>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+        });
+    </script>
+</body>
+</html> 

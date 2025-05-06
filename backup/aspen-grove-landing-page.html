@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aspen Grove Services | Secure Professional Document Portal</title>
+    <style>
+        /* Base Styles and Variables */
+        :root {
+            --primary-color: #4B6455; /* Deep sage green */
+            --secondary-color: #7D9D7F; /* Medium sage green */
+            --accent-color: #E8B87D; /* Aspen gold/amber */
+            --light-bg: #F4F7F2; /* Light sage background */
+            --white: #FFFFFF; /* Pure white */
+            --dark-text: #2C3A2F; /* Dark green for text */
+            --medium-text: #4A5D4E; /* Medium green for secondary text */
+            --light-gray: #E8EBE4; /* Very light sage for borders */
+            --error-color: #C75146; /* Muted red */
+            --success-color: #5A8F5A; /* Muted green */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+            --border-radius: 6px;
+            --border-radius-lg: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background-color: var(--white);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--white);
+            box-shadow: var(--shadow-sm);
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 12px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .main-nav {
+            display: flex;
+        }
+
+        .nav-item {
+            margin-left: 30px;
+            text-decoration: none;
+            color: var(--medium-text);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-item.cta {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+        }
+
+        .nav-item.cta:hover {
+            background-color: #3d5346;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 150px 20px 100px;
+            background-color: var(--light-bg);
+            position: relative;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            margin-bottom: 30px;
+            color: var(--medium-text);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: #3d5346;
+        }
+
+        .btn-secondary {
+            background-color: var(--white);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--light-bg);
+        }
+
+        .hero-image {
+            max-width: 500px;
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 20px;
+            background-color: var(--white);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 60px;
+            color: var(--medium-text);
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light-bg);
+            border-radius: 50%;
+            color: var(--primary-color);
+        }
+
+        .feature-icon svg {
+            width: 30px;
+            height: 30px;
+        }
+
+        .feature-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+
+        .feature-text {
+            color: var(--medium-text);
+        }
+
+        /* Services Section */
+        .services {
+            padding: 100px 20px;
+            background-color: var(--light-bg);
+        }
+
+        .services-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .services-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .service-tab {
+            padding: 12px 25px;
+            background-color: var(--white);
+            border: 1px solid var(--light-gray);
+            color: var(--medium-text);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 5px;
+        }
+
+        .service-tab:first-child {
+            border-top-left-radius: var(--border-radius);
+            border-bottom-left-radius: var(--border-radius);
+        }
+
+        .service-tab:last-child {
+            border-top-right-radius: var(--border-radius);
+            border-bottom-right-radius: var(--border-radius);
+        }
+
+        .service-tab.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        .service-tab:hover:not(.active) {
+            background-color: var(--light-bg);
+        }
+
+        .service-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow-md);
+            display: none;
+        }
+
+        .service-content.active {
+            display: block;
+        }
+
+        .service-content-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .service-content-icon {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light-bg);
+            border-radius: 50%;
+            color: var(--primary-color);
+        }
+
+        .service-content-icon svg {
+            width: 25px;
+            height: 25px;
+        }
+
+        .service-content-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .service-description {
+            margin-bottom: 30px;
+            color: var(--medium-text);
+        }
+
+        .service-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .service-feature-item {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .service-feature-icon {
+            color: var(--success-color);
+            margin-right: 10px;
+            margin-top: 5px;
+        }
+
+        .service-feature-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .service-cta {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 100px 20px;
+            background-color: var(--white);
+        }
+
+        .testimonials-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .testimonial-cards {
+            display: flex;
+            gap: 30px;
+            overflow-x: auto;
+            padding: 20px 10px;
+            scroll-snap-type: x mandatory;
+        }
+
+        .testimonial-card {
+            min-width: 300px;
+            background-color: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+            border-left: 4px solid var(--accent-color);
+            scroll-snap-align: start;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: var(--medium-text);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+            background-color: var(--light-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .testimonial-info {
+            flex: 1;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .testimonial-position {
+            font-size: 14px;
+            color: var(--medium-text);
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 100px 20px;
+            background-color: var(--light-bg);
+        }
+
+        .pricing-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-toggle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .pricing-toggle-option {
+            font-weight: 500;
+            color: var(--medium-text);
+        }
+
+        .pricing-toggle-switch {
+            width: 50px;
+            height: 26px;
+            background-color: var(--primary-color);
+            border-radius: 13px;
+            margin: 0 15px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .pricing-toggle-switch::before {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--white);
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: var(--transition);
+        }
+
+        .pricing-toggle-switch.annual::before {
+            left: 27px;
+        }
+
+        .pricing-toggle-option.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .pricing-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: 40px 30px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .pricing-card.popular {
+            border-top: 4px solid var(--accent-color);
+            position: relative;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            right: 30px;
+            background-color: var(--accent-color);
+            color: var(--dark-text);
+            font-size: 14px;
+            font-weight: 600;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .pricing-plan {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 15px;
+        }
+
+        .pricing-amount {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .pricing-period {
+            font-size: 16px;
+            color: var(--medium-text);
+            font-weight: normal;
+        }
+
+        .pricing-description {
+            color: var(--medium-text);
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .pricing-feature {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            color: var(--medium-text);
+        }
+
+        .pricing-feature-icon {
+            color: var(--success-color);
+            margin-right: 10px;
+            margin-top: 5px;
+            flex-shrink: 0;
+        }
+
+        .pricing-feature-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .pricing-button {
+            width: 100%;
+            text-align: center;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 100px 20px;
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .cta-text {
+            margin-bottom: 30px;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .cta-btn {
+            padding: 15px 30px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .cta-btn-primary {
+            background-color: var(--white);
+            color: var(--primary-color);
+        }
+
+        .cta-btn-primary:hover {
+            background-color: var(--light-bg);
+        }
+
+        .cta-btn-secondary {
+            background-color: transparent;
+            color: var(--white);
+            border: 1px solid var(--white);
+        }
+
+        .cta-btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-text);
+            color: var(--white);
+            padding: 60px 20px 30px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo-icon {
+            width: 36px;
+            height: 36px;
+            margin-right: 10px;
+        }
+
+        .footer-logo-text {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .footer-description {
+            margin-bottom: 20px;
+            opacity: 0.8;
+            max-width: 300px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+        }
+
+        .footer-social-icon {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            transition: var(--transition);
+        }
+
+        .footer-social-icon:hover {
+            background-color: var(--accent-color);
+            color: var(--dark-text);
+        }
+
+        .footer-heading {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-link {
+            margin-bottom: 12px;
+        }
+
+        .footer-link a {
+            color: var(--white);
+            opacity: 0.8;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link a:hover {
+            opacity: 1;
+            color: var(--accent-color);
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .footer-contact-icon {
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+
+        .footer-contact-text {
+            opacity: 0.8;
+        }
+
+        .footer-divider {
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-bottom-link {
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .footer-bottom-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Security Badges */
+        .security-badges {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            background-color: var(--white);
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .security-badge-icon {
+            margin-right: 10px;
+        }
+
+        .security-badge-text {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--dark-text);
+        }
+
+        /* Media Queries */
+        @media screen and (max-width: 1024px) {
+            .features-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pricing-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pricing-card:last-child {
+                grid-column: span 2;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .nav-container {
+                padding: 15px;
+            }
+
+            .main-nav {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-content {
+                margin-bottom: 40px;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .features-container {
+                grid-template-columns: 1fr;
+            }
+
+            .service-features {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card:last-child {
+                grid-column: span 1;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <div class="logo-container">
+                <svg class="logo" width="40" height="40" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background Circle -->
+                    <circle cx="100" cy="100" r="95" fill="#4B6455" stroke="#F4F7F2" stroke-width="2" />
+                    
+                    <!-- Aspen Trees -->
+                    <g id="trees">
+                        <!-- Tree 1 (center) -->
+                        <line x1="100" y1="140" x2="100" y2="60" stroke="#F4F7F2" stroke-width="4" />
+                        <!-- Branches -->
+                        <line x1="100" y1="80" x2="85" y2="65" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="100" y1="90" x2="115" y2="75" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="100" y1="110" x2="80" y2="95" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="100" y1="125" x2="118" y2="110" stroke="#F4F7F2" stroke-width="2" />
+                        
+                        <!-- Tree 2 (left) -->
+                        <line x1="70" y1="145" x2="70" y2="75" stroke="#F4F7F2" stroke-width="4" />
+                        <!-- Branches -->
+                        <line x1="70" y1="85" x2="55" y2="75" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="70" y1="100" x2="85" y2="85" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="70" y1="120" x2="55" y2="105" stroke="#F4F7F2" stroke-width="2" />
+                        
+                        <!-- Tree 3 (right) -->
+                        <line x1="130" y1="145" x2="130" y2="75" stroke="#F4F7F2" stroke-width="4" />
+                        <!-- Branches -->
+                        <line x1="130" y1="90" x2="145" y2="75" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="130" y1="110" x2="115" y2="95" stroke="#F4F7F2" stroke-width="2" />
+                        <line x1="130" y1="125" x2="145" y2="110" stroke="#F4F7F2" stroke-width="2" />
+                    </g>
+                    
+                    <!-- Leaves -->
+                    <g id="leaves">
+                        <!-- Center Tree Leaves -->
+                        <circle cx="100" cy="60" r="8" fill="#7D9D7F" />
+                        <circle cx="85" cy="65" r="6" fill="#7D9D7F" />
+                        <circle cx="115" cy="75" r="7" fill="#7D9D7F" />
+                        <circle cx="80" cy="95" r="6" fill="#7D9D7F" />
+                        <circle cx="118" cy="110" r="6" fill="#7D9D7F" />
+                        
+                        <!-- Left Tree Leaves -->
+                        <circle cx="70" cy="75" r="7" fill="#7D9D7F" />
+                        <circle cx="55" cy="75" r="6" fill="#7D9D7F" />
+                        <circle cx="85" cy="85" r="6" fill="#7D9D7F" />
+                        <circle cx="55" cy="105" r="6" fill="#7D9D7F" />
+                        
+                        <!-- Right Tree Leaves -->
+                        <circle cx="130" cy="75" r="7" fill="#7D9D7F" />
+                        <circle cx="145" cy="75" r="6" fill="#7D9D7F" />
+                        <circle cx="115" cy="95" r="6" fill="#7D9D7F" />
+                        <circle cx="145" cy="110" r="6" fill="#7D9D7F" />
+                    </g>
+                    
+                    <!-- Root System -->
+                    <path d="M60,145 C70,160 90,165 100,160 C110,165 130,160 140,145" stroke="#F4F7F2" stroke-width="3" fill="none" />
+                    
+                    <!-- Accent Elements -->
+                    <circle cx="145" cy="75" r="2" fill="#E8B87D" />
+                    <circle cx="85" cy="65" r="2" fill="#E8B87D" />
+                    <circle cx="55" cy="105" r="2" fill="#E8B87D" />
+                    <circle cx="118" cy="110" r="2" fill="#E8B87D" />
+                </svg>
+                <span class="logo-text">Aspen Grove Services</span>
+            </div>
+            
+            <nav class="main-nav">
+                <a href="#features" class="nav-item">Features</a>
+                <a href="#services" class="nav-item">Services</a>
+                <a href="#pricing" class="nav-item">Pricing</a>
+                <a href="#about" class="nav-item">About</a>
+                <a href="aspen-grove-login.html" class="nav-item">Login</a>
+                <a href="register-organization.html" class="nav-item cta">Get Started</a>
+            </nav>
+            
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Secure Document Processing for Professionals</h1>
+                <p class="hero-subtitle">Interconnected solutions with enterprise-grade security. Streamline your document workflow with our AI-assisted analysis and processing suite.</p>
+                <div class="hero-buttons">
+                    <a href="register-organization.html" class="btn btn-primary">Create Account</a>
+                    <a href="#services" class="btn btn-secondary">Explore Services</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="/api/placeholder/600/400" alt="Aspen Grove Services Dashboard" />
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <h2 class="section-title">Why Choose Aspen Grove?</h2>
+        <p class="section-subtitle">Just as aspen trees share a single root system, our services form an integrated ecosystem that strengthens with every connection.</p>
+        
+        <div class="features-container">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Military-Grade Security</h3>
+                <p class="feature-text">HIPAA-compliant platform with AES-256 encryption for all data at rest and in transit. Your sensitive information is always protected.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">AI-Assisted Analysis</h3>
+                <p class="feature-text">Our advanced AI technology helps organize, analyze, and extract critical information from complex documents, saving hours of manual work.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Customizable Templates</h3>
+                <p class="feature-text">Access profession-specific templates and customize them to your needs, ensuring consistency and quality in all your documentation.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Multi-Service Integration</h3>
+                <p class="feature-text">All our services are interconnected, sharing data and insights to provide a comprehensive solution for your document processing needs.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Seamless Workflow</h3>
+                <p class="feature-text">From document upload to final report delivery, our platform streamlines your workflow with automation and intelligent processing.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Dedicated Support</h3>
+                <p class="feature-text">Our team of experts is available to assist you, providing training, guidance, and support to maximize the value of our services.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <h2 class="section-title">Our Services</h2>
+        <p class="section-subtitle">Comprehensive solutions for various professional needs, all within a single secure platform.</p>
+        
+        <div class="services-container">
+            <div class="services-tabs">
+                <div class="service-tab active" data-service="tdiu">TDIU Report Service</div>
+                <div class="service-tab" data-service="document">Document Analysis</div>
+                <div class="service-tab" data-service="templates">Brief Templates</div>
+                <div class="service-tab" data-service="translation">Medical Terms Translation</div>
+                <div class="service-tab" data-service="database">VA Decision Database</div>
+            </div>
+            
+            <div class="service-content active" id="tdiu-service">
+                <div class="service-content-header">
+                    <div class="service-content-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                        </svg>
+                    </div>
+                    <h3 class="service-content-title">TDIU Report Service</h3>
+                </div>
+                
+                <p class="service-description">Our flagship service generates comprehensive Total Disability Individual Unemployability (TDIU) reports for veterans' attorneys. Using AI-assisted analysis, we extract and organize key information from medical records, employment histories, and other relevant documents to create detailed, persuasive reports that support TDIU claims.</p>
+                
+                <div class="service-features">
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>HIPAA-compliant document processing</span>
+                    </div>
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>AI-assisted medical evidence extraction</span>
+                    </div>
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Employment history analysis</span>
+                    </div>
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Professional report generation</span>
+                    </div>
+                </div>
+                
+                <div class="service-cta">
+                    <a href="register-organization.html" class="btn btn-primary">Get Started</a>
+                </div>
+            </div>
+            
+            <div class="service-content" id="document-service">
+                <div class="service-content-header">
+                    <div class="service-content-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/>
+                        </svg>
+                    </div>
+                    <h3 class="service-content-title">Document Analysis Service</h3>
+                </div>
+                
+                <p class="service-description">Our Document Analysis Service uses AI to organize, classify, and extract key information from complex document sets. Perfect for medical records, legal documents, and other professional files, this service creates searchable, structured document libraries that make finding critical information quick and easy.</p>
+                
+                <div class="service-features">
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Intelligent document classification</span>
+                    </div>
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Searchable document libraries</span>
+                    </div>
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Key information extraction</span>
+                    </div>
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Chronological organization</span>
+                    </div>
+                </div>
+                
+                <div class="service-cta">
+                    <a href="register-organization.html" class="btn btn-primary">Get Started</a>
+                </div>
+            </div>
+            
+            <div class="service-content" id="templates-service">
+                <!-- Content for Brief Templates service -->
+                <div class="service-content-header">
+                    <div class="service-content-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="service-content-title">VA Brief Templates</h3>
+                </div>
+                
+                <p class="service-description">Access our library of customizable legal brief templates designed specifically for VA disability claims. Each template includes effective language, relevant citations, and strategic structure to help you create compelling briefs quickly and consistently.</p>
+                
+                <div class="service-features">
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Customizable templates for various claim types</span>
+                    </div>
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Pre-populated with effective language</span>
+                    </div>
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Up-to-date citations and references</span>
+                    </div>
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Strategic structure for persuasive arguments</span>
+                    </div>
+                </div>
+                
+                <div class="service-cta">
+                    <a href="register-organization.html" class="btn btn-primary">Get Started</a>
+                </div>
+            </div>
+            
+            <div class="service-content" id="translation-service">
+                <!-- Content for Medical Terms Translation service -->
+                <div class="service-content-header">
+                    <div class="service-content-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+                        </svg>
+                    </div>
+                    <h3 class="service-content-title">Medical Terms Translation</h3>
+                </div>
+                
+                <p class="service-description">Our Medical Terms Translation service converts complex medical terminology into clear, VA-relevant language that explicitly connects conditions to functional limitations. This service helps bridge the gap between medical evidence and VA disability criteria, strengthening the connection between medical conditions and their impact on employment.</p>
+                
+                <div class="service-features">
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Plain language explanations</span>
+                    </div>
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Functional impact descriptions</span>
+                    </div>
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Connection to VA disability criteria</span>
+                    </div>
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Work capacity implications</span>
+                    </div>
+                </div>
+                
+                <div class="service-cta">
+                    <a href="register-organization.html" class="btn btn-primary">Get Started</a>
+                </div>
+            </div>
+            
+            <div class="service-content" id="database-service">
+                <!-- Content for VA Decision Database service -->
+                <div class="service-content-header">
+                    <div class="service-content-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                        </svg>
+                    </div>
+                    <h3 class="service-content-title">VA Decision Database</h3>
+                </div>
+                
+                <p class="service-description">Our searchable database of anonymized VA decisions provides valuable insights into success patterns, helping you identify effective strategies and approaches. This database is organized by Regional Office, condition type, and outcome, allowing you to find relevant precedents for your cases.</p>
+                
+                <div class="service-features">
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Searchable decision database</span>
+                    </div>
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Success pattern analysis</span>
+                    </div>
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Regional Office specific insights</span>
+                    </div>
+                    <div class="service-feature-item">
+                        <span class="service-feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </span>
+                        <span>Advanced filtering and search</span>
+                    </div>
+                </div>
+                
+                <div class="service-cta">
+                    <a href="register-organization.html" class="btn btn-primary">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <h2 class="section-title">What Our Clients Say</h2>
+        <p class="section-subtitle">Hear from professionals who have transformed their document workflows with Aspen Grove Services.</p>
+        
+        <div class="testimonials-container">
+            <div class="testimonial-cards">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Aspen Grove's TDIU report service has revolutionized our practice. What used to take days now takes hours, and the quality of the reports has helped us win more cases for our veteran clients."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">RS</div>
+                        <div class="testimonial-info">
+                            <div class="testimonial-name">Robert Smith</div>
+                            <div class="testimonial-position">Veterans Law Attorney</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The document analysis service has been a game-changer for our medical practice. We can now quickly extract and organize key information from complex medical records, saving countless hours of manual work."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">SJ</div>
+                        <div class="testimonial-info">
+                            <div class="testimonial-name">Sarah Johnson, MD</div>
+                            <div class="testimonial-position">Medical Director</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The security and compliance features of Aspen Grove Services give us peace of mind when handling sensitive client information. The military-grade encryption and HIPAA compliance are exactly what we needed."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">MD</div>
+                        <div class="testimonial-info">
+                            <div class="testimonial-name">Michael Davis</div>
+                            <div class="testimonial-position">Legal Practice Manager</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The VA Brief Templates have significantly improved our efficiency and consistency. Having access to effective language and structure has been invaluable for our team of attorneys."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">JW</div>
+                        <div class="testimonial-info">
+                            <div class="testimonial-name">Jennifer Williams</div>
+                            <div class="testimonial-position">Veterans Advocate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <h2 class="section-title">Simple, Transparent Pricing</h2>
+        <p class="section-subtitle">Choose the plan that fits your organization's needs with no hidden fees.</p>
+        
+        <div class="pricing-container">
+            <div class="pricing-toggle">
+                <span class="pricing-toggle-option active" data-period="monthly">Monthly</span>
+                <div class="pricing-toggle-switch" id="pricing-switch"></div>
+                <span class="pricing-toggle-option" data-period="annual">Annual (Save 10%)</span>
+            </div>
+            
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <h3 class="pricing-plan">Basic Plan</h3>
+                    <div class="pricing-amount">$199<span class="pricing-period">/month</span></div>
+                    <p class="pricing-description">Perfect for small organizations or solo practitioners just getting started.</p>
+                    
+                                            <ul class="pricing-features">
+                        <li class="pricing-feature">
+                            <span class="pricing-feature-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                            </span>
+                            <span>Up to 5 user accounts</span>
+                        </li>
+                        <li class="pricing-feature">
+                            <span class="pricing-feature-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                            </span>
+                            <span>50GB secure document storage</span>
+                        </li>
+                        <li class="pricing-feature">
+                            <span class="pricing-feature-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                            </span>
+                            <span>5% discount on TDIU reports</span>
+                        </li>
+                        <li class="pricing-feature">
+                            <span class="pricing-feature-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                            </span>
+                            <span>Standard support</span>
+                        </li>

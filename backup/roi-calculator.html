@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aspen Grove Solutions - ROI Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --sage-green: #7A918D;
+            --amber-gold: #D4AF37;
+            --forest-green: #2F4F4F;
+            --light-sage: #E8EDEC;
+            --white: #FFFFFF;
+            --hover-green: #5A7A75;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+
+        body {
+            background-color: var(--light-sage);
+            color: var(--forest-green);
+            line-height: 1.6;
+        }
+
+        .calculator-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px var(--shadow-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .calculator-header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, var(--sage-green), var(--amber-gold));
+            border-radius: 2px;
+        }
+
+        .calculator-header h1 {
+            color: var(--forest-green);
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        .calculator-header p {
+            color: var(--sage-green);
+            font-size: 1.2em;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .calculator-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .view-column {
+            padding: 20px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .current-view {
+            background: var(--white);
+            border: 1px solid var(--light-sage);
+        }
+
+        .potential-view {
+            background: linear-gradient(135deg, var(--white), var(--light-sage));
+            border: 1px solid var(--amber-gold);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
+        }
+
+        .metric-group {
+            margin-bottom: 24px;
+            padding: 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--light-sage);
+            background: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-group::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--sage-green);
+            transition: all 0.3s ease;
+        }
+
+        .metric-group:nth-child(1)::before { background: var(--sage-green); }
+        .metric-group:nth-child(2)::before { background: var(--amber-gold); }
+        .metric-group:nth-child(3)::before { background: var(--forest-green); }
+
+        .metric-group:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-group:hover::before {
+            width: 6px;
+        }
+
+        .current-view .metric-group {
+            border: 1px solid var(--light-sage);
+            background: var(--white);
+        }
+
+        .current-view .metric-group:hover {
+            border-color: var(--sage-green);
+            background: var(--light-sage);
+        }
+
+        .metric-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .metric-label span {
+            color: var(--forest-green);
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            color: var(--sage-green);
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .potential-view .metric-group {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--amber-gold);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.1);
+        }
+
+        .potential-view .metric-value {
+            color: var(--amber-gold);
+            font-weight: 700;
+            font-size: 1.3em;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .slider-container {
+            margin: 15px 0 5px 0;
+            position: relative;
+        }
+
+        .slider-container input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 5px;
+            background: linear-gradient(to right, 
+                        var(--sage-green) 0%, 
+                        var(--sage-green) var(--range-progress, 50%), 
+                        var(--light-sage) var(--range-progress, 50%), 
+                        var(--light-sage) 100%);
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--amber-gold);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .slider-container input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--amber-gold);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s;
+        }
+
+        .slider-container input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        .slider-marks {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 0.8em;
+            color: var(--sage-green);
+            padding: 0 5px;
+        }
+
+        .tooltip {
+            position: absolute;
+            display: none;
+            background: var(--forest-green);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            transform: translateX(-50%);
+            pointer-events: none;
+            z-index: 100;
+            white-space: nowrap;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid var(--forest-green);
+        }
+
+        .slider-container:hover .tooltip {
+            display: block;
+        }
+
+        .metric-info {
+            color: var(--sage-green);
+            font-size: 0.85em;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+
+        .view-header {
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--light-sage);
+        }
+
+        .view-header h2 {
+            color: var(--forest-green);
+            font-size: 1.2em;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .view-header p {
+            color: var(--sage-green);
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .potential-view::before {
+            content: 'Potential Impact';
+            position: absolute;
+            top: 15px;
+            right: -35px;
+            background: var(--amber-gold);
+            color: var(--white);
+            padding: 8px 40px;
+            transform: rotate(45deg);
+            font-size: 0.9em;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--light-sage), var(--white));
+            border-radius: 12px;
+            border: 1px solid var(--amber-gold);
+        }
+
+        .cta-section h3 {
+            font-size: 1.6em;
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: var(--forest-green);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, var(--amber-gold), #e0b93b);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.3em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(135deg, #e0b93b, var(--amber-gold));
+        }
+
+        @media (max-width: 768px) {
+            .calculator-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        .urgency-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--amber-gold), #e0b93b);
+            color: var(--white);
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .stats-banner {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background: var(--light-sage);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            color: var(--amber-gold);
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: var(--sage-green);
+        }
+
+        .result-summary {
+            background: linear-gradient(135deg, var(--light-sage), var(--white));
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 30px 0;
+            border: 1px solid var(--amber-gold);
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
+        }
+
+        .result-title {
+            font-size: 1.5em;
+            color: var(--forest-green);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .result-metrics {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .result-metric {
+            flex: 1;
+            min-width: 200px;
+            padding: 20px;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .result-metric:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-value {
+            font-size: 2em;
+            color: var(--amber-gold);
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-label {
+            font-size: 1em;
+            color: var(--sage-green);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <div class="calculator-header">
+            <div class="urgency-badge">Limited Time Offer: 20% Off First Year</div>
+            <h1>Transform Your Legal Practice with AI</h1>
+            <p>See how Aspen Grove's AI document assistance can revolutionize your workflow and increase your revenue</p>
+        </div>
+
+        <div class="calculator-content">
+            <div class="view-column current-view">
+                <div class="view-header">
+                    <h2>Current State</h2>
+                    <p>Your practice's current document preparation workflow</p>
+                </div>
+                
+                <div class="metric-group">
+                    <div class="metric-label">
+                        <span>Monthly Document Volume</span>
+                        <div class="metric-value" id="current-volume">50 documents</div>
+                    </div>
+                    <p class="metric-info">The number of documents your practice processes each month</p>
+                    <div class="slider-container">
+                        <label for="case-volume" class="sr-only">Monthly Document Volume</label>
+                        <input type="range" 
+                               id="case-volume" 
+                               min="10" 
+                               max="300" 
+                               value="50" 
+                               step="10"
+                               aria-valuemin="10"
+                               aria-valuemax="300"
+                               aria-valuenow="50"
+                               aria-labelledby="current-volume">
+                        <div class="tooltip" id="volume-tooltip">50 documents</div>
+                        <div class="slider-marks">
+                            <span>10</span>
+                            <span>100</span>
+                            <span>200</span>
+                            <span>300</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-group">
+                    <div class="metric-label">
+                        <span>Hours per Document</span>
+                        <div class="metric-value" id="current-hours">5 hours</div>
+                    </div>
+                    <p class="metric-info">Average time spent processing each document</p>
+                    <div class="slider-container">
+                        <label for="hours-per-case" class="sr-only">Hours per Document</label>
+                        <input type="range" 
+                               id="hours-per-case" 
+                               min="2" 
+                               max="10" 
+                               value="5" 
+                               step="1"
+                               aria-valuemin="2"
+                               aria-valuemax="10"
+                               aria-valuenow="5"
+                               aria-labelledby="current-hours">
+                        <div class="tooltip" id="hours-tooltip">5 hours</div>
+                        <div class="slider-marks">
+                            <span>2</span>
+                            <span>4</span>
+                            <span>6</span>
+                            <span>8</span>
+                            <span>10</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-group">
+                    <div class="metric-label">
+                        <span>Billable Rate</span>
+                        <div class="metric-value" id="current-rate">$250/hr</div>
+                    </div>
+                    <p class="metric-info">Your average hourly rate charged to clients</p>
+                    <div class="slider-container">
+                        <label for="billable-rate" class="sr-only">Billable Rate</label>
+                        <input type="range" 
+                               id="billable-rate" 
+                               min="150" 
+                               max="500" 
+                               value="250" 
+                               step="50"
+                               aria-valuemin="150"
+                               aria-valuemax="500"
+                               aria-valuenow="250"
+                               aria-labelledby="current-rate">
+                        <div class="tooltip" id="rate-tooltip">$250/hr</div>
+                        <div class="slider-marks">
+                            <span>$150</span>
+                            <span>$250</span>
+                            <span>$350</span>
+                            <span>$500</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="view-column potential-view">
+                <div class="view-header">
+                    <h2>With Aspen Grove AI</h2>
+                    <p>Your practice's potential with AI document assistance</p>
+                </div>
+
+                <div class="metric-group">
+                    <div class="metric-label">
+                        <span>Additional Capacity</span>
+                        <div class="metric-value" id="potential-volume">+25 documents</div>
+                    </div>
+                </div>
+
+                <div class="metric-group">
+                    <div class="metric-label">
+                        <span>Time Saved</span>
+                        <div class="metric-value" id="potential-time">-125 hours</div>
+                    </div>
+                </div>
+
+                <div class="metric-group">
+                    <div class="metric-label">
+                        <span>Revenue Impact</span>
+                        <div class="metric-value" id="potential-revenue">+$12,500 monthly</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-summary">
+            <h3 class="result-title">Your Personalized ROI Summary</h3>
+            <div class="result-metrics">
+                <div class="result-metric">
+                    <div class="result-value" id="annual-revenue">+$150,000</div>
+                    <div class="result-label">Annual Revenue Increase</div>
+                </div>
+                <div class="result-metric">
+                    <div class="result-value" id="annual-time">-1,500</div>
+                    <div class="result-label">Annual Hours Saved</div>
+                </div>
+                <div class="result-metric">
+                    <div class="result-value" id="roi-percentage">605%</div>
+                    <div class="result-label">Return on Investment</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h3>Ready to transform your practice?</h3>
+            <p style="color: var(--sage-green); margin-bottom: 20px;">Join hundreds of successful law firms already using Aspen Grove</p>
+            <a href="#" class="cta-button">Schedule Your Free Demo</a>
+        </div>
+    </div>
+
+    <script>
+        // View switching
+        const viewButtons = document.querySelectorAll('.view-button');
+        const views = document.querySelectorAll('.view');
+
+        viewButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const viewId = button.dataset.view;
+                
+                // Update buttons
+                viewButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Update views
+                views.forEach(view => view.classList.remove('active'));
+                document.getElementById(`${viewId}-view`).classList.add('active');
+            });
+        });
+
+        const inputs = {
+            caseVolume: document.getElementById('case-volume'),
+            billableRate: document.getElementById('billable-rate'),
+            hoursPerCase: document.getElementById('hours-per-case')
+        };
+
+        const valueDisplays = {
+            caseVolume: document.getElementById('case-volume-value'),
+            billableRate: document.getElementById('billable-rate-value'),
+            hoursPerCase: document.getElementById('hours-per-case-value')
+        };
+
+        const resultDisplays = {
+            volume: document.getElementById('volume-result'),
+            revenue: document.getElementById('revenue-result'),
+            time: document.getElementById('time-result')
+        };
+
+        const toggleButtons = document.querySelectorAll('.toggle-button');
+        let currentPeriod = 'monthly';
+
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const period = button.dataset.period;
+                if (period === currentPeriod) return;
+
+                toggleButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                currentPeriod = period;
+
+                // Update calculations based on period
+                updateCalculations();
+            });
+        });
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        // Function to update slider appearance and tooltip position
+        function updateSlider(input, tooltip, value) {
+            // Calculate progress percentage for the fill effect
+            const min = parseInt(input.min);
+            const max = parseInt(input.max);
+            const progress = ((value - min) / (max - min)) * 100;
+            
+            // Update the CSS variable for the colored fill
+            input.style.setProperty('--range-progress', `${progress}%`);
+            
+            // Update the aria values for accessibility
+            input.setAttribute('aria-valuenow', value);
+            
+            // Position the tooltip correctly
+            const thumbPosition = (value - min) / (max - min);
+            const thumbPosPixels = thumbPosition * input.offsetWidth;
+            tooltip.style.left = `${thumbPosPixels}px`;
+            tooltip.style.top = '-30px';
+        }
+
+        // Function to add the 'changed' class and remove it after animation
+        function animateChange(element) {
+            element.classList.add('changed');
+            setTimeout(() => {
+                element.classList.remove('changed');
+            }, 1000);
+        }
+
+        // Update all calculations
+        function updateCalculations() {
+            const volume = parseInt(inputs.caseVolume.value);
+            const hours = parseInt(inputs.hoursPerCase.value);
+            const rate = parseInt(inputs.billableRate.value);
+            
+            // Update current state displays
+            document.getElementById('current-volume').textContent = `${volume} documents`;
+            document.getElementById('current-hours').textContent = `${hours} hours`;
+            document.getElementById('current-rate').textContent = `${formatCurrency(rate)}/hr`;
+            
+            // Update tooltips
+            document.getElementById('volume-tooltip').textContent = `${volume} documents`;
+            document.getElementById('hours-tooltip').textContent = `${hours} hours`;
+            document.getElementById('rate-tooltip').textContent = `${formatCurrency(rate)}/hr`;
+            
+            // Calculate efficiency based on volume with diminishing returns
+            // Larger practices see smaller percentage improvements
+            const baseEfficiencyRate = 0.6; // 60% improvement for small volumes
+            const minEfficiencyRate = 0.4; // 40% minimum improvement for large volumes
+            const efficiencyRate = Math.max(
+                minEfficiencyRate, 
+                baseEfficiencyRate - (volume / 1000)
+            );
+            
+            // Calculate potential impact with variable improvement rates
+            const additionalCases = Math.floor(volume * efficiencyRate);
+            const timeSaved = Math.round(volume * hours * efficiencyRate);
+            const revenueIncrease = additionalCases * rate * hours;
+            
+            // Annual calculations
+            const annualRevenue = revenueIncrease * 12;
+            const annualTimeSaved = timeSaved * 12;
+            
+            // ROI calculation (assuming $24,000 annual subscription cost)
+            const annualCost = 24000;
+            const roiPercentage = Math.round((annualRevenue / annualCost) * 100);
+            
+            // Update potential state displays with animations
+            document.getElementById('potential-volume').textContent = `+${additionalCases} documents`;
+            document.getElementById('potential-time').textContent = `-${formatNumber(timeSaved)} hours`;
+            document.getElementById('potential-revenue').textContent = `+${formatCurrency(revenueIncrease)} monthly`;
+            
+            // Update summary metrics
+            document.getElementById('annual-revenue').textContent = `+${formatCurrency(annualRevenue)}`;
+            document.getElementById('annual-time').textContent = `-${formatNumber(annualTimeSaved)}`;
+            document.getElementById('roi-percentage').textContent = `${roiPercentage}%`;
+            
+            // Update slider visuals
+            updateSlider(inputs.caseVolume, document.getElementById('volume-tooltip'), volume);
+            updateSlider(inputs.hoursPerCase, document.getElementById('hours-tooltip'), hours);
+            updateSlider(inputs.billableRate, document.getElementById('rate-tooltip'), rate);
+        }
+
+        // Add event listeners for each slider
+        inputs.caseVolume.addEventListener('input', function() {
+            updateCalculations();
+            animateChange(document.getElementById('potential-volume'));
+            animateChange(document.getElementById('potential-time'));
+            animateChange(document.getElementById('potential-revenue'));
+        });
+
+        inputs.hoursPerCase.addEventListener('input', function() {
+            updateCalculations();
+            animateChange(document.getElementById('potential-time'));
+            animateChange(document.getElementById('potential-revenue'));
+        });
+
+        inputs.billableRate.addEventListener('input', function() {
+            updateCalculations();
+            animateChange(document.getElementById('potential-revenue'));
+        });
+
+        // Initialize calculations
+        updateCalculations();
+    </script>
+</body>
+</html> 

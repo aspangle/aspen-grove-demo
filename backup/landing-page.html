@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aspen Grove Services | Professional Case Management Solutions</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="sitemap" href="/sitemap-index.xml">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script defer src="https://kit.fontawesome.com/141d61c8d4.js" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --primary-color: #2C5282; /* MyCase blue */
+            --primary-light: #4299E1;
+            --secondary-color: #2B6CB0;
+            --accent-color: #F6AD55; /* Warm accent */
+            --accent-dark: #ED8936;
+            --light-bg: #F7FAFC;
+            --white: #FFFFFF;
+            --dark-text: #2D3748;
+            --medium-text: #4A5568;
+            --light-gray: #E2E8F0;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --border-radius: 4px;
+            --border-radius-lg: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background-color: var(--white);
+        }
+
+        /* Header Styles */
+        header {
+            position: fixed;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--dark-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--white);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            overflow: hidden;
+            padding: 6rem 0;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                url("data:image/svg+xml,%3Csvg width='1200' height='1600' viewBox='0 0 1200 1600' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M600 0 L650 200 L700 150 L750 300 L800 250 L850 400 L900 350 L950 500 L1000 450 L1050 600 L1100 550 L1150 700 L1200 650 L1150 800 L1100 750 L1050 900 L1000 850 L950 1000 L900 950 L850 1100 L800 1050 L750 1200 L700 1150 L650 1300 L600 1250 L550 1400 L500 1350 L450 1500 L400 1450 L350 1600 L300 1550 L250 1600 L200 1550 L150 1400 L100 1350 L50 1200 L0 1150 L50 1000 L100 950 L150 800 L200 750 L250 600 L300 550 L350 400 L400 350 L450 200 L500 150 L550 0 Z' fill='%23FFFFFF' fill-opacity='0.1'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-position: center right;
+            background-repeat: no-repeat;
+            opacity: 0.15;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: left;
+            color: var(--white);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            max-width: 800px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            max-width: 600px;
+            line-height: 1.4;
+        }
+
+        .hero-features {
+            display: flex;
+            gap: 2rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .hero-feature {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-feature i {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        .hero-feature span {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .btn-hero {
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-hero-primary {
+            background: var(--accent-color);
+            color: var(--dark-text);
+        }
+
+        .btn-hero-primary:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-hero-secondary {
+            background: transparent;
+            border: 2px solid var(--white);
+            color: var(--white);
+        }
+
+        .btn-hero-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .section-title p {
+            font-size: 1.3rem;
+            color: var(--medium-text);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Card Styling */
+        .feature-card, .service-card, .security-card, .industry-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border: 1px solid var(--light-gray);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-card:hover, .service-card:hover, .security-card:hover, .industry-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-card h3, .service-card h3, .security-card h3, .industry-card h3 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .feature-list li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 1.1rem;
+            color: var(--medium-text);
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        /* Pain Points Section */
+        .pain-points {
+            padding: 5rem 0;
+            background-color: var(--light-bg);
+        }
+
+        .pain-points-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .pain-point-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+
+        .pain-point-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .comparison {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+
+        .comparison-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .comparison-item h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin: 0 1rem;
+        }
+
+        /* Platform Preview Section */
+        .platform-preview {
+            padding: 5rem 0;
+            background-color: var(--white);
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .preview-card {
+            position: relative;
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+
+        .preview-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .preview-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: var(--white);
+        }
+
+        .preview-overlay h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 0;
+            background-color: var(--light-bg);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border: 1px solid var(--light-gray);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-color);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .feature-list li::before {
+            content: "•";
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                url("data:image/svg+xml,%3Csvg width='400' height='600' viewBox='0 0 400 600' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M200 0 L225 100 L250 75 L275 150 L300 125 L325 200 L350 175 L375 250 L400 225 L375 300 L350 275 L325 350 L300 325 L275 400 L250 375 L225 450 L200 425 L175 500 L150 475 L125 550 L100 525 L75 600 L50 575 L25 600 L0 575 L25 500 L50 475 L75 350 L100 325 L125 200 L150 175 L175 50 L200 25 L225 100 L200 75 L175 0 Z' fill='%23FFFFFF' fill-opacity='0.05'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-position: center right;
+            background-repeat: no-repeat;
+            opacity: 0.1;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .features-grid,
+            .services-grid,
+            .security-grid,
+            .industries-grid {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+            }
+        }
+
+        /* Additional styles for new sections */
+        .services, .security, .industries {
+            padding: 5rem 0;
+            background-color: var(--white);
+        }
+
+        .services-grid, .security-grid, .industries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .service-card, .security-card, .industry-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border: 1px solid var(--light-gray);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before, .security-card::before, .industry-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-color);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .service-card:hover::before, .security-card:hover::before, .industry-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-card h3, .security-card h3, .industry-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .stats {
+            background: var(--light-bg);
+            padding: 4rem 0;
+            border-top: 1px solid var(--light-gray);
+            border-bottom: 1px solid var(--light-gray);
+            position: relative;
+        }
+
+        .stats::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                url("data:image/svg+xml,%3Csvg width='400' height='600' viewBox='0 0 400 600' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M200 0 L225 100 L250 75 L275 150 L300 125 L325 200 L350 175 L375 250 L400 225 L375 300 L350 275 L325 350 L300 325 L275 400 L250 375 L225 450 L200 425 L175 500 L150 475 L125 550 L100 525 L75 600 L50 575 L25 600 L0 575 L25 500 L50 475 L75 350 L100 325 L125 200 L150 175 L175 50 L200 25 L225 100 L200 75 L175 0 Z' fill='%234B6455' fill-opacity='0.05'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-position: center right;
+            background-repeat: no-repeat;
+            opacity: 0.1;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 1.5rem;
+        }
+
+        .stat-item .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item .stat-label {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .services-grid, .security-grid, .industries-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Add to existing styles */
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 300px;
+            perspective: 1000px;
+            margin-bottom: 2rem;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+        }
+
+        .flip-card-front {
+            background: var(--white);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .flip-card-front:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .learn-more-btn {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--accent-color);
+            color: var(--dark-text);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .learn-more-btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+        }
+
+        .flip-card-back {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        .flip-card-front h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .flip-card-back h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .flip-card-back p {
+            color: var(--white);
+            opacity: 0.9;
+        }
+
+        /* Aspen Tree Pattern */
+        .aspen-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(45deg, var(--primary-color) 25%, transparent 25%),
+                linear-gradient(-45deg, var(--primary-color) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, var(--primary-color) 75%),
+                linear-gradient(-45deg, transparent 75%, var(--primary-color) 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            opacity: 0.05;
+            z-index: 1;
+        }
+
+        /* Update existing styles */
+        .preview-grid .flip-card {
+            height: 400px;
+        }
+
+        .preview-grid .flip-card-front {
+            padding: 0;
+        }
+
+        .preview-grid .preview-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: var(--border-radius-lg);
+        }
+
+        .preview-grid .flip-card-front h3 {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: var(--white);
+            margin: 0;
+        }
+
+        .stats-grid .flip-card {
+            height: 200px;
+        }
+
+        .stats-grid .flip-card-front {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--light-bg);
+        }
+
+        .stats-grid .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-grid .stat-label {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .preview-grid .flip-card {
+                height: 300px;
+            }
+
+            .stats-grid .flip-card {
+                height: 180px;
+            }
+        }
+
+        .preview-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .preview-icon-wrapper {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .preview-icon {
+            font-size: 3rem;
+            color: var(--white);
+        }
+
+        .preview-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .preview-content p {
+            color: var(--medium-text);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .learn-more-btn {
+            padding: 0.8rem 1.5rem;
+            background: var(--accent-color);
+            color: var(--dark-text);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .learn-more-btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .flip-card {
+            height: 400px;
+            perspective: 1000px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+        }
+
+        .flip-card-front {
+            background: var(--white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .flip-card-back {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .flip-card-back h3 {
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .flip-card-back .feature-list {
+            list-style: none;
+            text-align: left;
+            padding: 0 1rem;
+        }
+
+        .flip-card-back .feature-list li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .flip-card-back .feature-list li i {
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            .preview-icon-wrapper {
+                width: 80px;
+                height: 80px;
+            }
+
+            .preview-icon {
+                font-size: 2.5rem;
+            }
+
+            .preview-content h3 {
+                font-size: 1.3rem;
+            }
+
+            .preview-content p {
+                font-size: 1rem;
+            }
+
+            .flip-card {
+                height: 350px;
+            }
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .feature-grid-item {
+            text-align: center;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            transition: var(--transition);
+        }
+
+        .feature-grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-icon i {
+            font-size: 2.5rem;
+            color: var(--white);
+        }
+
+        .feature-grid-item h3 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .feature-grid-item p {
+            color: var(--medium-text);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <span class="logo-text">Aspen Grove Services</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#platform" class="nav-link">Platform</a></li>
+                <li><a href="#pricing" class="nav-link">Pricing</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="#signup" class="btn btn-primary">Get Started</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Transform Your Professional Services with Intelligent Case Management</h1>
+            <p class="hero-subtitle">Streamline your workflow, reduce costs, and handle more cases with our all-in-one platform designed for modern professional services.</p>
+            <div class="hero-features">
+                <div class="hero-feature">
+                    <i class="fas fa-clock"></i>
+                    <span>Save 60% on processing time</span>
+                </div>
+                <div class="hero-feature">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Handle 50% more cases</span>
+                </div>
+                <div class="hero-feature">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>Reduce costs by 40%</span>
+                </div>
+            </div>
+            <div class="hero-cta">
+                <a href="#signup" class="btn btn-hero btn-hero-primary">Start Free Trial</a>
+                <a href="#demo" class="btn btn-hero btn-hero-secondary">Watch Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="pain-points" id="pain-points">
+        <div class="section-title">
+            <h2>The Cost of Inefficiency</h2>
+        </div>
+        <div class="pain-points-grid">
+            <div class="pain-point-card">
+                <h3>Time Savings</h3>
+                <div class="comparison">
+                    <div class="comparison-item">
+                        <h4>Traditional Process</h4>
+                        <div class="comparison-value">11-16 hours</div>
+                        <p>per report</p>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="comparison-item">
+                        <h4>With Aspen Grove</h4>
+                        <div class="comparison-value">4-6 hours</div>
+                        <p>per report</p>
+                    </div>
+                </div>
+            </div>
+            <div class="pain-point-card">
+                <h3>Cost Reduction</h3>
+                <div class="comparison">
+                    <div class="comparison-item">
+                        <h4>Traditional Costs</h4>
+                        <div class="comparison-value">Significant</div>
+                        <p>monthly expenses</p>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="comparison-item">
+                        <h4>With Aspen Grove</h4>
+                        <div class="comparison-value">Up to 60%</div>
+                        <p>cost reduction</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="platform-preview" id="platform">
+        <div class="section-title">
+            <h2>See the Platform in Action</h2>
+            <p>Experience our integrated suite of professional services</p>
+        </div>
+        <div class="preview-grid">
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="preview-content">
+                            <div class="preview-icon-wrapper">
+                                <i class="fas fa-tasks preview-icon"></i>
+                            </div>
+                            <h3>Case Management</h3>
+                            <p>Integrated dashboard for complete case oversight</p>
+                            <button class="learn-more-btn">View Demo</button>
+                        </div>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Comprehensive Case Management</h3>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> Real-time case tracking</li>
+                            <li><i class="fas fa-check-circle"></i> Automated workflow management</li>
+                            <li><i class="fas fa-check-circle"></i> Integrated document handling</li>
+                            <li><i class="fas fa-check-circle"></i> Team collaboration tools</li>
+                            <li><i class="fas fa-check-circle"></i> Deadline monitoring</li>
+                            <li><i class="fas fa-check-circle"></i> Client communication portal</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="preview-content">
+                            <div class="preview-icon-wrapper">
+                                <i class="fas fa-file-alt preview-icon"></i>
+                            </div>
+                            <h3>Document Management</h3>
+                            <p>Secure, organized, and easily accessible</p>
+                            <button class="learn-more-btn">View Demo</button>
+                        </div>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Advanced Document Features</h3>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> AI-powered document analysis</li>
+                            <li><i class="fas fa-check-circle"></i> Automated categorization</li>
+                            <li><i class="fas fa-check-circle"></i> Version control system</li>
+                            <li><i class="fas fa-check-circle"></i> Collaborative review tools</li>
+                            <li><i class="fas fa-check-circle"></i> Secure storage with encryption</li>
+                            <li><i class="fas fa-check-circle"></i> Quick search capabilities</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="preview-content">
+                            <div class="preview-icon-wrapper">
+                                <i class="fas fa-chart-line preview-icon"></i>
+                            </div>
+                            <h3>Report Generation</h3>
+                            <p>Create professional reports in minutes</p>
+                            <button class="learn-more-btn">View Demo</button>
+                        </div>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Intelligent Report Tools</h3>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> Automated data collection</li>
+                            <li><i class="fas fa-check-circle"></i> Customizable templates</li>
+                            <li><i class="fas fa-check-circle"></i> Expert review integration</li>
+                            <li><i class="fas fa-check-circle"></i> Data visualization tools</li>
+                            <li><i class="fas fa-check-circle"></i> Multi-format export</li>
+                            <li><i class="fas fa-check-circle"></i> One-click sharing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="section-title">
+            <h2>Everything You Need in One Platform</h2>
+            <p>Streamline your workflow with our comprehensive suite of professional tools</p>
+        </div>
+        <div class="feature-grid">
+            <div class="feature-grid-item">
+                <div class="feature-icon">
+                    <i class="fas fa-file-signature"></i>
+                </div>
+                <h3>Client Intake Forms</h3>
+                <p>Send customizable online intake forms to new clients. Streamline your onboarding process.</p>
+            </div>
+            <div class="feature-grid-item">
+                <div class="feature-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h3>Calendaring</h3>
+                <p>Combine all appointments, meetings, and events into one central calendar with text reminders.</p>
+            </div>
+            <div class="feature-grid-item">
+                <div class="feature-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <h3>Document Management</h3>
+                <p>Generate and track all case documents in one place. Auto-populate with client details.</p>
+            </div>
+            <div class="feature-grid-item">
+                <div class="feature-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3>Time Tracking</h3>
+                <p>Track time and expenses across client projects with automated reminders for common tasks.</p>
+            </div>
+            <div class="feature-grid-item">
+                <div class="feature-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>Client Portal</h3>
+                <p>Let clients access their case updates, documents, and invoices through a secure portal.</p>
+            </div>
+            <div class="feature-grid-item">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Case Analytics</h3>
+                <p>Track case progress, deadlines, and performance metrics with detailed analytics.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <div class="section-title">
+            <h2>Comprehensive Service Suite</h2>
+        </div>
+        <div class="services-grid">
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <h3>Report Generation</h3>
+                        <ul class="feature-list">
+                            <li>Vocational Assessments</li>
+                            <li>Medical Opinions</li>
+                            <li>Expert Witness Reports</li>
+                            <li>Case Analysis Reports</li>
+                        </ul>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Advanced Report Features</h3>
+                        <p>Our AI-powered system generates comprehensive reports in minutes, not hours. Includes automated data collection, expert review integration, and customizable templates.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <h3>Document Management</h3>
+                        <ul class="feature-list">
+                            <li>Secure Document Storage</li>
+                            <li>AI-Assisted Analysis</li>
+                            <li>Version Control</li>
+                            <li>Collaborative Review</li>
+                        </ul>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Smart Document Processing</h3>
+                        <p>Automated document organization with AI-powered analysis. Real-time collaboration tools and version control ensure your team always works with the latest information.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <h3>Case Management</h3>
+                        <ul class="feature-list">
+                            <li>Case Tracking</li>
+                            <li>Deadline Management</li>
+                            <li>Client Communication</li>
+                            <li>Workflow Automation</li>
+                        </ul>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Streamlined Workflows</h3>
+                        <p>End-to-end case management with automated workflows, deadline tracking, and integrated client communication tools. Reduce administrative overhead by up to 70%.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="security" id="security">
+        <div class="section-title">
+            <h2>Enterprise-Grade Security</h2>
+        </div>
+        <div class="security-grid">
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <h3>Data Protection</h3>
+                        <ul class="feature-list">
+                            <li>AWS Infrastructure</li>
+                            <li>HIPAA Compliance</li>
+                            <li>End-to-End Encryption</li>
+                            <li>Secure Storage</li>
+                        </ul>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Advanced Security</h3>
+                        <p>Built on AWS infrastructure with HIPAA compliance and 256-bit encryption. Regular security audits and automated compliance monitoring ensure your data stays protected.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <h3>Access Control</h3>
+                        <ul class="feature-list">
+                            <li>Role-Based Permissions</li>
+                            <li>Multi-Factor Auth</li>
+                            <li>Audit Trails</li>
+                            <li>User Management</li>
+                        </ul>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Granular Access</h3>
+                        <p>Fine-grained access control with role-based permissions and multi-factor authentication. Comprehensive audit trails track all system access and changes.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <h3>Compliance & Monitoring</h3>
+                        <ul class="feature-list">
+                            <li>Real-Time Monitoring</li>
+                            <li>Compliance Logging</li>
+                            <li>Security Audits</li>
+                            <li>Data Backup</li>
+                        </ul>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Continuous Protection</h3>
+                        <p>24/7 security monitoring with automated compliance logging and regular security audits. Automated backup and recovery systems ensure business continuity.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="industries" id="industries">
+        <div class="section-title">
+            <h2>Trusted Across Industries</h2>
+        </div>
+        <div class="industries-grid">
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <h3>Legal Services</h3>
+                        <ul class="feature-list">
+                            <li>VA Disability Claims</li>
+                            <li>Document Management</li>
+                            <li>Case Tracking</li>
+                            <li>Expert Coordination</li>
+                        </ul>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Legal Solutions</h3>
+                        <p>Specialized tools for VA disability claims processing, including automated form filling, document verification, and expert witness coordination. Streamline your legal workflow with our comprehensive platform.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <h3>Vocational Services</h3>
+                        <ul class="feature-list">
+                            <li>Assessment Management</li>
+                            <li>Expert Witness Services</li>
+                            <li>Case Analysis</li>
+                            <li>Report Generation</li>
+                        </ul>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Vocational Expertise</h3>
+                        <p>Comprehensive assessment tools with standardized evaluation templates, automated scoring, and detailed reporting capabilities. Connect with expert witnesses and streamline the assessment process.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <h3>Professional Services</h3>
+                        <ul class="feature-list">
+                            <li>Document Analysis</li>
+                            <li>Workflow Automation</li>
+                            <li>Client Management</li>
+                            <li>Service Delivery</li>
+                        </ul>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Professional Tools</h3>
+                        <p>End-to-end service delivery platform with client portal, automated workflows, and integrated billing. Scale your operations while maintaining quality and compliance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">HIPAA Compliant</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Compliance Excellence</h3>
+                        <p>Full HIPAA compliance with automated safeguards, regular audits, and comprehensive documentation. Your data security is our top priority.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Security Monitoring</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Continuous Protection</h3>
+                        <p>Round-the-clock security monitoring with real-time threat detection and automated response protocols. Sleep soundly knowing your data is protected.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="stat-number">99.99%</div>
+                        <div class="stat-label">Uptime</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Reliable Performance</h3>
+                        <p>Enterprise-grade infrastructure with redundant systems and automated failover. Experience consistent, reliable service when you need it most.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="stat-number">256-bit</div>
+                        <div class="stat-label">Encryption</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Advanced Security</h3>
+                        <p>Military-grade encryption for data in transit and at rest. Multi-layer security protocols ensure your sensitive information remains protected.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="cta-content">
+            <h2>Ready to Transform Your Practice?</h2>
+            <p>Join the growing network of organizations using Aspen Grove Services for secure, efficient document management.</p>
+            <a href="#signup" class="btn btn-secondary">Start Free Trial</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2024 Aspen Grove Services. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const flipCards = document.querySelectorAll('.flip-card');
+            
+            flipCards.forEach(card => {
+                const front = card.querySelector('.flip-card-front');
+                const back = card.querySelector('.flip-card-back');
+                const learnMoreBtn = front.querySelector('.learn-more-btn');
+                
+                learnMoreBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    card.classList.toggle('flipped');
+                });
+                
+                back.addEventListener('click', () => {
+                    card.classList.toggle('flipped');
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

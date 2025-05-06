@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Management | Aspen Grove Services</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4B6455;
+            --primary-light: #5d7a69;
+            --secondary-color: #7D9D7F;
+            --accent-color: #E8B87D;
+            --accent-dark: #d9a76c;
+            --light-bg: #F4F7F2;
+            --white: #FFFFFF;
+            --dark-text: #2C3A2F;
+            --medium-text: #4A5D4E;
+            --light-gray: #E8EBE4;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+            --border-radius: 6px;
+            --border-radius-lg: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .email-dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .sidebar {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 2rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-menu a {
+            color: var(--white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .sidebar-menu a:hover {
+            background: var(--primary-light);
+        }
+
+        .main-content {
+            padding: 2rem;
+        }
+
+        .email-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--accent-color);
+            color: var(--dark-text);
+        }
+
+        .btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+        }
+
+        .email-list {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .email-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .email-item:hover {
+            background: var(--light-bg);
+        }
+
+        .email-item.unread {
+            font-weight: 600;
+        }
+
+        .email-checkbox {
+            width: 20px;
+            height: 20px;
+        }
+
+        .email-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .email-subject {
+            font-weight: 500;
+        }
+
+        .email-preview {
+            color: var(--medium-text);
+            font-size: 0.9rem;
+        }
+
+        .email-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.25rem;
+            font-size: 0.9rem;
+            color: var(--medium-text);
+        }
+
+        .email-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.25rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--medium-text);
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            color: var(--accent-color);
+        }
+
+        .compose-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .compose-modal.active {
+            display: flex;
+        }
+
+        .compose-form {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--medium-text);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+        }
+
+        .form-group textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .email-dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .search-bar {
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="email-dashboard">
+            <div class="sidebar">
+                <h2>Email Management</h2>
+                <ul class="sidebar-menu">
+                    <li><a href="#"><i class="fas fa-inbox"></i> Inbox</a></li>
+                    <li><a href="#"><i class="fas fa-paper-plane"></i> Sent</a></li>
+                    <li><a href="#"><i class="fas fa-star"></i> Starred</a></li>
+                    <li><a href="#"><i class="fas fa-trash"></i> Trash</a></li>
+                    <li><a href="#"><i class="fas fa-folder"></i> Folders</a></li>
+                    <li><a href="#"><i class="fas fa-tag"></i> Labels</a></li>
+                </ul>
+            </div>
+            <div class="main-content">
+                <div class="email-header">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search emails...">
+                        <button class="btn"><i class="fas fa-search"></i></button>
+                    </div>
+                    <button class="btn" onclick="toggleCompose()">
+                        <i class="fas fa-plus"></i> Compose
+                    </button>
+                </div>
+                <div class="email-list">
+                    <div class="email-item unread">
+                        <input type="checkbox" class="email-checkbox">
+                        <div class="email-content">
+                            <div class="email-subject">Case Update: Smith vs. Johnson</div>
+                            <div class="email-preview">The latest documents have been processed and are ready for review...</div>
+                        </div>
+                        <div class="email-meta">
+                            <div class="email-time">10:30 AM</div>
+                            <div class="email-actions">
+                                <button class="action-btn"><i class="fas fa-star"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add more email items here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="compose-modal" id="composeModal">
+        <div class="compose-form">
+            <h2>Compose Email</h2>
+            <form>
+                <div class="form-group">
+                    <label>To:</label>
+                    <input type="email" placeholder="Enter recipient email">
+                </div>
+                <div class="form-group">
+                    <label>Subject:</label>
+                    <input type="text" placeholder="Enter subject">
+                </div>
+                <div class="form-group">
+                    <label>Message:</label>
+                    <textarea placeholder="Type your message here..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn" onclick="toggleCompose()">Cancel</button>
+                    <button type="submit" class="btn">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleCompose() {
+            const modal = document.getElementById('composeModal');
+            modal.classList.toggle('active');
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aspen Grove Services | Secure TDIU Report Generation & Document Management</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Base Styles and Variables */
+        :root {
+            --primary-color: #4B6455; /* Deep sage green */
+            --primary-light: #5d7a69; /* Lighter sage for hover */
+            --secondary-color: #7D9D7F; /* Medium sage green */
+            --accent-color: #E8B87D; /* Aspen gold/amber */
+            --accent-dark: #d9a76c; /* Darker gold for hover */
+            --light-bg: #F4F7F2; /* Light sage background */
+            --white: #FFFFFF; /* Pure white */
+            --dark-text: #2C3A2F; /* Dark green for text */
+            --medium-text: #4A5D4E; /* Medium green for secondary text */
+            --light-gray: #E8EBE4; /* Very light sage for borders */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+            --border-radius: 6px;
+            --border-radius-lg: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        /* Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background-color: var(--white);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+        }
+
+        h3 {
+            font-size: 1.75rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Button styles */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            cursor: pointer;
+            font-size: 1rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--accent-color);
+            color: var(--dark-text);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--accent-dark);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Layout */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section-md {
+            padding: 4rem 0;
+        }
+
+        .section-sm {
+            padding: 3rem 0;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-sm);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            box-shadow: var(--shadow-md);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 0.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-left: 2rem;
+        }
+
+        .nav-link {
+            color: var(--dark-text);
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link.active:after {
+            width: 100%;
+            background-color: var(--primary-color);
+        }
+
+        .nav-cta {
+            padding: 0.6rem 1.2rem;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            margin-left: 2rem;
+        }
+
+        .nav-cta:hover {
+            background-color: var(--primary-light);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 0 5rem;
+            background: linear-gradient(135deg, var(--light-bg) 0%, var(--white) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-text);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--medium-text);
+            margin-bottom: 2rem;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-image {
+            position: absolute;
+            right: -10%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50%;
+            max-width: 600px;
+            z-index: 1;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--medium-text);
+        }
+
+        /* Features Section */
+        .features {
+            background-color: var(--white);
+            padding: 5rem 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--dark-text);
+        }
+
+        .feature-text {
+            color: var(--medium-text);
+            margin-bottom: 0;
+        }
+
+        /* Process Section */
+        .process {
+            background-color: var(--light-bg);
+            padding: 5rem 0;
+        }
+
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            position: relative;
+        }
+
+        .process-step {
+            flex: 1;
+            text-align: center;
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: bold;
+        }
+
+        /* Security Section */
+        .security {
+            background-color: var(--white);
+            padding: 5rem 0;
+        }
+
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .security-item {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .security-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: var(--white);
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+
+        .cta-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-light {
+            background-color: var(--white);
+            color: var(--primary-color);
+        }
+
+        .btn-light:hover {
+            background-color: var(--light-bg);
+            color: var(--primary-color);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-text);
+            color: var(--white);
+            padding: 5rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-logo-icon {
+            width: 36px;
+            height: 36px;
+            margin-right: 10px;
+        }
+
+        .footer-logo-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .footer-description {
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+            max-width: 300px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-social-icon {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            transition: var(--transition);
+        }
+
+        .footer-social-icon:hover {
+            background-color: var(--accent-color);
+            color: var(--dark-text);
+            transform: translateY(-3px);
+        }
+
+        .footer-heading {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-link {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-link a {
+            color: var(--white);
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+
+        .footer-link a:hover {
+            opacity: 1;
+            color: var(--accent-color);
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .footer-contact-icon {
+            margin-right: 0.75rem;
+            margin-top: 0.25rem;
+            color: var(--accent-color);
+        }
+
+        .footer-contact-text {
+            opacity: 0.8;
+        }
+
+        .footer-divider {
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-bottom-link {
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .footer-bottom-link:hover {
+            text-decoration: underline;
+            color: var(--white);
+        }
+
+        /* Security Badges */
+        .security-badges {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            background-color: var(--white);
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .security-badge-icon {
+            margin-right: 0.75rem;
+            color: var(--primary-color);
+        }
+
+        .security-badge-text {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--dark-text);
+        }
+
+        /* Animations and Effects */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .float-animation {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 1200px) {
+            h1 {
+                font-size: 3rem;
+            }
+
+            h2 {
+                font-size: 2.25rem;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .pricing-cards {
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .hero {
+                background: var(--light-bg);
+                padding: 7rem 0 4rem;
+            }
+
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-text {
+                max-width: 100%;
+                margin-bottom: 3rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-btns {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .service-features {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.popular {
+                transform: scale(1);
+            }
+
+            .pricing-card.popular:hover {
+                transform: translateY(-10px);
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.25rem;
+            }
+
+            h2 {
+                font-size: 1.75rem;
+            }
+
+            .navbar {
+                padding: 1rem 0;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 2.25rem;
+            }
+
+            .hero-btns {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: center;
+            }
+
+            .stat-item {
+                text-align: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .service-content {
+                padding: 2rem;
+            }
+
+            .pricing-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .pricing-card {
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .footer-bottom-links {
+                flex-direction: column;
+                gap: 0.75rem;
+                margin-top: 1rem;
+            }
+
+            .security-badges {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <svg class="logo-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background Circle -->
+                        <circle cx="100" cy="100" r="95" fill="#4B6455" stroke="#F4F7F2" stroke-width="2" />
+                        
+                        <!-- Aspen Trees -->
+                        <g id="trees">
+                            <!-- Tree 1 (center) -->
+                            <line x1="100" y1="140" x2="100" y2="60" stroke="#F4F7F2" stroke-width="4" />
+                            <line x1="100" y1="80" x2="85" y2="65" stroke="#F4F7F2" stroke-width="2" />
+                            <line x1="100" y1="90" x2="115" y2="75" stroke="#F4F7F2" stroke-width="2" />
+                            <line x1="100" y1="110" x2="80" y2="95" stroke="#F4F7F2" stroke-width="2" />
+                            <line x1="100" y1="125" x2="118" y2="110" stroke="#F4F7F2" stroke-width="2" />
+                            
+                            <!-- Tree 2 (left) -->
+                            <line x1="70" y1="145" x2="70" y2="75" stroke="#F4F7F2" stroke-width="4" />
+                            <line x1="70" y1="85" x2="55" y2="75" stroke="#F4F7F2" stroke-width="2" />
+                            <line x1="70" y1="100" x2="85" y2="85" stroke="#F4F7F2" stroke-width="2" />
+                            <line x1="70" y1="120" x2="55" y2="105" stroke="#F4F7F2" stroke-width="2" />
+                            
+                            <!-- Tree 3 (right) -->
+                            <line x1="130" y1="145" x2="130" y2="75" stroke="#F4F7F2" stroke-width="4" />
+                            <line x1="130" y1="90" x2="145" y2="75" stroke="#F4F7F2" stroke-width="2" />
+                            <line x1="130" y1="110" x2="115" y2="95" stroke="#F4F7F2" stroke-width="2" />
+                            <line x1="130" y1="125" x2="145" y2="110" stroke="#F4F7F2" stroke-width="2" />
+                        </g>
+                        
+                        <!-- Leaves -->
+                        <g id="leaves">
+                            <!-- Center Tree Leaves -->
+                            <circle cx="100" cy="60" r="8" fill="#7D9D7F" />
+                            <circle cx="85" cy="65" r="6" fill="#7D9D7F" />
+                            <circle cx="115" cy="75" r="7" fill="#7D9D7F" />
+                            <circle cx="80" cy="95" r="6" fill="#7D9D7F" />
+                            <circle cx="118" cy="110" r="6" fill="#7D9D7F" />
+                            
+                            <!-- Left Tree Leaves -->
+                            <circle cx="70" cy="75" r="7" fill="#7D9D7F" />
+                            <circle cx="55" cy="75" r="6" fill="#7D9D7F" />
+                            <circle cx="85" cy="85" r="6" fill="#7D9D7F" />
+                            <circle cx="55" cy="105" r="6" fill="#7D9D7F" />
+                            
+                            <!-- Right Tree Leaves -->
+                            <circle cx="130" cy="75" r="7" fill="#7D9D7F" />
+                            <circle cx="145" cy="75" r="6" fill="#7D9D7F" />
+                            <circle cx="115" cy="95" r="6" fill="#7D9D7F" />
+                            <circle cx="145" cy="110" r="6" fill="#7D9D7F" />
+                        </g>
+                        
+                        <!-- Root System -->
+                        <path d="M60,145 C70,160 90,165 100,160 C110,165 130,160 140,145" stroke="#F4F7F2" stroke-width="3" fill="none" />
+                        
+                        <!-- Accent Elements -->
+                        <circle cx="145" cy="75" r="2" fill="#E8B87D" />
+                        <circle cx="85" cy="65" r="2" fill="#E8B87D" />
+                        <circle cx="55" cy="105" r="2" fill="#E8B87D" />
+                        <circle cx="118" cy="110" r="2" fill="#E8B87D" />
+                    </svg>
+                    <span class="logo-text">Aspen Grove</span>
+                </a>
+                
+                <ul class="nav-links">
+                    <li class="nav-item"><a href="#features" class="nav-link">Features</a></li>
+                    <li class="nav-item"><a href="#process" class="nav-link">How It Works</a></li>
+                    <li class="nav-item"><a href="#security" class="nav-link">Security</a></li>
+                    <li class="nav-item"><a href="#pricing" class="nav-link">Pricing</a></li>
+                    <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+                    <li class="nav-item"><a href="/login" class="nav-link nav-cta">Login</a></li>
+                </ul>
+                
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Professional TDIU Reports, Securely Delivered</h1>
+                <p class="hero-subtitle">Enterprise-grade document management and report generation for VA disability claims. Save time, reduce errors, and improve approval rates.</p>
+                <div class="hero-cta-group">
+                    <a href="/register" class="btn btn-primary btn-lg">Get Started</a>
+                    <a href="#demo" class="btn btn-outline btn-lg">Request Demo</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">98%</span>
+                        <span class="stat-label">Client Satisfaction</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">24hr</span>
+                        <span class="stat-label">Average Turnaround</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">HIPAA Compliant</span>
+                    </div>
+                </div>
+            </div>
+            <img src="assets/hero-illustration.svg" alt="Document Management System" class="hero-image">
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Professionals Choose Aspen Grove</h2>
+                <p class="section-subtitle">Just as aspen trees share a single root system, our suite of services forms an integrated ecosystem that strengthens your workflow with every connection.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Military-Grade Security</h3>
+                    <p class="feature-text">HIPAA-compliant platform with AES-256 encryption for all data at rest and in transit, ensuring your sensitive information stays protected.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="feature-title">AI-Assisted Analysis</h3>
+                    <p class="feature-text">Our advanced AI technology helps organize, analyze, and extract critical information from complex documents, saving hours of manual work.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Customizable Templates</h3>
+                    <p class="feature-text">Access profession-specific templates and customize them to your needs, ensuring consistency and quality in all your documentation.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <h3 class="feature-title">Multi-Service Integration</h3>
+                    <p class="feature-text">All our services are interconnected, sharing data and insights to provide a comprehensive solution for your document processing needs.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Seamless Workflow</h3>
+                    <p class="feature-text">From document upload to final report delivery, our platform streamlines your workflow with automation and intelligent processing.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3 class="feature-title">Dedicated Support</h3>
+                    <p class="feature-text">Our team of experts is available to assist you, providing training, guidance, and support to maximize the value of our services.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process section" id="process">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">How It Works</h2>
+                <p class="section-subtitle">Simple, efficient, and secure report generation process</p>
+            </div>
+            
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h3>Upload Documents</h3>
+                    <p>Securely upload your case documents through our encrypted portal</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h3>AI Analysis</h3>
+                    <p>Our AI system analyzes and extracts relevant information</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h3>Review & Approve</h3>
+                    <p>Review the generated report and request any necessary changes</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <h3>Download Report</h3>
+                    <p>Download your professionally formatted TDIU report</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Section -->
+    <section class="security section" id="security">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Enterprise-Grade Security</h2>
+                <p class="section-subtitle">Your data is protected with military-grade security measures</p>
+            </div>
+            
+            <div class="security-grid">
+                <div class="security-item">
+                    <i class="fas fa-lock security-icon"></i>
+                    <h3>End-to-End Encryption</h3>
+                    <p>All data is encrypted in transit and at rest</p>
+                </div>
+                <div class="security-item">
+                    <i class="fas fa-user-shield security-icon"></i>
+                    <h3>HIPAA Compliant</h3>
+                    <p>Full compliance with healthcare data regulations</p>
+                </div>
+                <div class="security-item">
+                    <i class="fas fa-server security-icon"></i>
+                    <h3>AWS Infrastructure</h3>
+                    <p>Built on secure, scalable cloud infrastructure</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="cta-title">Ready to Streamline Your TDIU Reports?</h2>
+            <p class="cta-subtitle">Join leading law firms who trust Aspen Grove Services for their document management needs</p>
+            <div class="cta-buttons">
+                <a href="/register" class="btn btn-light btn-lg">Start Free Trial</a>
+                <a href="#contact" class="btn btn-outline btn-lg">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">
+                        <svg class="footer-logo-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Background Circle -->
+                            <circle cx="100" cy="100" r="95" fill="#7D9D7F" stroke="#F4F7F2" stroke-width="2" />
+                            
+                            <!-- Aspen Trees (simplified for footer) -->
+                            <line x1="100" y1="140" x2="100" y2="60" stroke="#F4F7F2" stroke-width="4" />
+                            <line x1="70" y1="145" x2="70" y2="75" stroke="#F4F7F2" stroke-width="4" />
+                            <line x1="130" y1="145" x2="130" y2="75" stroke="#F4F7F2" stroke-width="4" />
+                            
+                            <!-- Root System -->
+                            <path d="M60,145 C70,160 90,165 100,160 C110,165 130,160 140,145" stroke="#F4F7F2" stroke-width="3" fill="none" />
+                        </svg>
+                        <span class="footer-logo-text">Aspen Grove</span>
+                    </div>
+                    <p class="footer-description">Secure, intelligent document processing solutions designed specifically for legal, medical, and financial professionals.</p>
+                    <div class="footer-social">
+                        <a href="#" class="footer-social-icon">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="footer-social-icon">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="footer-social-icon">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="footer-heading">Company</h4>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="about.html">About Us</a></li>
+                        <li class="footer-link"><a href="careers.html">Careers</a></li>
+                        <li class="footer-link"><a href="blog.html">Blog</a></li>
+                        <li class="footer-link"><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-heading">Services</h4>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="services.html#tdiu">TDIU Reports</a></li>
+                        <li class="footer-link"><a href="services.html#document">Document Analysis</a></li>
+                        <li class="footer-link"><a href="services.html#templates">Brief Templates</a></li>
+                        <li class="footer-link"><a href="services.html#translation">Medical Terms Translation</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-heading">Contact Us</h4>
+                    <div class="footer-contact-item">
+                        <span class="footer-contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                        <span class="footer-contact-text">support@aspengroveservices.com</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="footer-contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </span>
+                        <span class="footer-contact-text">(800) 555-1234</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="footer-contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </span>
+                        <span class="footer-contact-text">123 Professional Plaza<br>Suite 400<br>Portland, OR 97201</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-divider"></div>
+            
+            <div class="footer-bottom">
+                <div>© 2025 Aspen Grove Services. All rights reserved.</div>
+                <div class="footer-bottom-links">
+                    <a href="privacy.html" class="footer-bottom-link">Privacy Policy</a>
+                    <a href="terms.html" class="footer-bottom-link">Terms of Service</a>
+                    <a href="cookies.html" class="footer-bottom-link">Cookie Policy</a>
+                </div>
+            </div>
+            
+            <div class="security-badges">
+                <div class="security-badge">
+                    <span class="security-badge-icon">
+                        <i class="fas fa-lock"></i>
+                    </span>
+                    <span class="security-badge-text">HIPAA Compliant</span>
+                </div>
+                <div class="security-badge">
+                    <span class="security-badge-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </span>
+                    <span class="security-badge-text">AES-256 Encryption</span>
+                </div>
+                <div class="security-badge">
+                    <span class="security-badge-icon">
+                        <i class="fab fa-aws"></i>
+                    </span>
+                    <span class="security-badge-text">AWS Security</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Add smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
