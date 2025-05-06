@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aspen Grove Solutions - Transform your legal practice with AI-powered document processing. Increase efficiency and revenue with our innovative solutions.">
+    <meta name="keywords" content="legal tech, AI document processing, law firm efficiency, legal automation, document management">
+    <meta name="author" content="Aspen Grove Solutions">
+    <meta property="og:title" content="Aspen Grove Solutions - AI-Powered Legal Document Processing">
+    <meta property="og:description" content="Transform your legal practice with AI-powered document processing. Increase efficiency and revenue with innovative solutions.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aspangle.github.io/aspen-grove-demo/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Aspen Grove Solutions - AI-Powered Legal Document Processing">
+    <meta name="twitter:description" content="Transform your legal practice with AI-powered document processing. Increase efficiency and revenue with innovative solutions.">
     <title>Aspen Grove Solutions - AI-Powered Document Processing</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
@@ -507,6 +517,93 @@
             opacity: 1;
             pointer-events: auto;
         }
+
+        /* Mobile Navigation Styles */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--forest-green);
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .main-menu {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 4px 15px var(--shadow-color);
+            }
+
+            .main-menu.active {
+                display: flex;
+            }
+
+            .menu-item {
+                width: 100%;
+                margin: 0;
+            }
+
+            .menu-item > a {
+                padding: 15px;
+                width: 100%;
+                display: block;
+                border-bottom: 1px solid var(--light-sage);
+            }
+
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                box-shadow: none;
+                padding: 0;
+                margin: 10px 0;
+                display: none;
+            }
+
+            .menu-item.active .dropdown-menu {
+                display: block;
+            }
+
+            .dropdown-item {
+                padding: 10px 15px 10px 30px;
+            }
+
+            .logo-text {
+                font-size: 1.2em;
+            }
+
+            .navbar.sticky .logo-text {
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 0 15px;
+                height: 60px;
+            }
+
+            .logo img {
+                height: 30px;
+            }
+
+            .logo-text {
+                font-size: 1em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -518,6 +615,9 @@
             <img src="aspen-tree-logo.svg" alt="Aspen Grove Solutions Logo">
             <span class="logo-text">Aspen Grove</span>
         </a>
+        <button class="mobile-menu-toggle" aria-label="Toggle menu">
+            <i class="fas fa-bars"></i>
+        </button>
         <ul class="main-menu" id="mainMenu">
             <li class="menu-item">
                 <a href="#">Solutions</a>
@@ -786,9 +886,6 @@
                 <a href="#" class="demo-btn">Get a Demo</a>
             </li>
         </ul>
-        <div class="hamburger" id="hamburgerMenu">
-            <i class="fas fa-bars"></i>
-        </div>
     </nav>
 
     <!-- Hero Section -->
@@ -1735,6 +1832,30 @@
                 if (window.innerWidth > 992) {
                     dropdownOverlay.classList.remove('active');
                 }
+            });
+
+            // Add mobile menu toggle functionality
+            document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+                document.querySelector('.main-menu').classList.toggle('active');
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                const menu = document.querySelector('.main-menu');
+                const toggle = document.querySelector('.mobile-menu-toggle');
+                if (!menu.contains(event.target) && !toggle.contains(event.target) && menu.classList.contains('active')) {
+                    menu.classList.remove('active');
+                }
+            });
+
+            // Handle mobile dropdown toggles
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (window.innerWidth <= 768) {
+                        this.classList.toggle('active');
+                        e.preventDefault();
+                    }
+                });
             });
         });
     </script>

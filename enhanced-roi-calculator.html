@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate your potential ROI with Aspen Grove's AI document processing solution. See how much time and money your legal practice could save.">
+    <meta name="keywords" content="legal ROI calculator, law firm efficiency, document processing ROI, legal tech calculator">
+    <meta name="author" content="Aspen Grove Solutions">
+    <meta property="og:title" content="Aspen Grove Solutions - ROI Calculator">
+    <meta property="og:description" content="Calculate your potential ROI with AI-powered document processing. See how much time and money your legal practice could save.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aspangle.github.io/aspen-grove-demo/enhanced-roi-calculator.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Aspen Grove Solutions - ROI Calculator">
+    <meta name="twitter:description" content="Calculate your potential ROI with AI-powered document processing. See how much time and money your legal practice could save.">
     <title>Aspen Grove Solutions - Enhanced ROI Calculator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -88,10 +98,12 @@
 
         .metric-group {
             margin-bottom: 24px;
-            padding: 18px;
-            border-radius: 8px;
+            padding: 24px;
+            border-radius: 12px;
             transition: all 0.3s ease;
-            border: 1px solid var(--light-sage);
+            border: 2px solid var(--light-sage);
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .metric-group.changed {
@@ -99,26 +111,27 @@
         }
 
         @keyframes highlight {
-            0% { background-color: rgba(212, 175, 55, 0.1); }
-            100% { background-color: transparent; }
+            0% { background-color: rgba(212, 175, 55, 0.1); border-color: var(--amber-gold); }
+            100% { background-color: rgba(255, 255, 255, 0.7); border-color: var(--light-sage); }
         }
 
         .current-view .metric-group:hover {
-            border-color: var(--sage-green);
-            background: rgba(122, 145, 141, 0.05);
+            border-color: var(--amber-gold);
+            background: rgba(255, 255, 255, 0.9);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
         }
 
         .metric-group:nth-child(1) {
-            border-left: 4px solid #7A918D;
+            border-left: 4px solid var(--sage-green);
         }
 
         .metric-group:nth-child(2) {
-            border-left: 4px solid #D4AF37;
+            border-left: 4px solid var(--amber-gold);
         }
 
         .metric-group:nth-child(3) {
-            border-left: 4px solid #2F4F4F;
+            border-left: 4px solid var(--forest-green);
         }
 
         .metric-label {
@@ -162,15 +175,24 @@
         }
 
         .potential-view .metric-group {
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid var(--amber-gold);
-            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.2);
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid var(--amber-gold);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+            position: relative;
+            overflow: visible;
+        }
+
+        .potential-view .metric-group:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
         }
 
         .potential-view .metric-value {
             color: var(--amber-gold);
             font-weight: 700;
             font-size: 1.2em;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
         }
 
         .slider-container {
@@ -463,9 +485,29 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .calculator-container {
+                padding: 20px;
+            }
+
             .calculator-content {
                 grid-template-columns: 1fr;
-                gap: 40px;
+                gap: 20px;
+            }
+
+            .view-column {
+                padding: 15px;
+            }
+
+            .calculator-header h1 {
+                font-size: 1.6em;
+            }
+
+            .calculator-header p {
+                font-size: 1em;
             }
 
             .result-metrics {
@@ -473,8 +515,51 @@
                 gap: 15px;
             }
 
+            .result-metric {
+                min-width: 100%;
+                padding: 15px;
+            }
+
+            .metric-group {
+                padding: 15px;
+            }
+
+            .metric-label {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .metric-value {
+                text-align: left;
+            }
+
+            .slider-marks {
+                font-size: 0.7em;
+            }
+
+            .cta-section {
+                padding: 20px 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
             .calculator-container {
-                padding: 20px;
+                padding: 15px;
+            }
+
+            .calculator-header h1 {
+                font-size: 1.4em;
+            }
+
+            .result-value {
+                font-size: 1.5em;
+            }
+
+            .potential-view::before {
+                font-size: 0.8em;
+                padding: 4px 10px;
+                right: 10px;
             }
         }
 
@@ -1693,5 +1778,4 @@
         });
     </script>
 </body>
-</html>
 </html>
